@@ -13,6 +13,7 @@ namespace XNAProject
 {
    public class GameProject : Microsoft.Xna.Framework.Game
    {
+        int hello;
       public const float FPS_INTERVAL = 1f;
       public const float STANDARD_INTERVAL = 1f / 60f;
       GraphicsDeviceManager GraphicsMgr { get; set; }
