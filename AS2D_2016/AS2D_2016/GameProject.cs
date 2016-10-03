@@ -18,6 +18,8 @@ namespace XNAProject
       GraphicsDeviceManager GraphicsMgr { get; set; }
       SpriteBatch SpriteMgr { get; set; }
 
+        int test = 0;
+
       RessourcesManager<SpriteFont> FontsMgr { get; set; }
       RessourcesManager<Texture2D> TexturesMgr { get; set; }
 
