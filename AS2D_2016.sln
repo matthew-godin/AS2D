@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AS2D_2016", "AS2D_2016\AS2D_2016\AS2D_2016.csproj", "{7525CF5A-9847-4DE3-9B50-03AB5317FB15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AS2D_2016Content", "AS2D_2016\AS2D_2016Content\AS2D_2016Content.contentproj", "{95E0C12D-C9DC-4936-8AD7-024BEFF17810}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7525CF5A-9847-4DE3-9B50-03AB5317FB15}.Debug|x86.ActiveCfg = Debug|x86
+		{7525CF5A-9847-4DE3-9B50-03AB5317FB15}.Debug|x86.Build.0 = Debug|x86
+		{7525CF5A-9847-4DE3-9B50-03AB5317FB15}.Release|x86.ActiveCfg = Release|x86
+		{7525CF5A-9847-4DE3-9B50-03AB5317FB15}.Release|x86.Build.0 = Release|x86
+		{95E0C12D-C9DC-4936-8AD7-024BEFF17810}.Debug|x86.ActiveCfg = Debug|x86
+		{95E0C12D-C9DC-4936-8AD7-024BEFF17810}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
