@@ -32,7 +32,7 @@ namespace XNAProject
         Rectangle SourceRectangle { get; set; }
 
         //fireball
-        Vector2 Delta { get; set; }
+        protected Vector2 Delta { get; set; }
         float RightMargin { get; set; }
         float BottomMargin { get; set; }
 
