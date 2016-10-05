@@ -22,7 +22,7 @@ namespace XNAProject
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class Spaceship : AnimatedSprite
+    public class Spaceship //: AnimatedSprite
     {
         //Property initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
