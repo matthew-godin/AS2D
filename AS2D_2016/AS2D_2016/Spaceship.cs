@@ -22,10 +22,17 @@ namespace XNAProject
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class Spaceship //: AnimatedSprite
+    public class Spaceship : AnimatedSprite
     {
+        //Constant
+        const int MOVING = 1;
+
         //Property initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
+
+        int DeltaX { get; set; }
+        int DeltaY { get; set; }
+        InputManager InputMgr { get; set; }
 
         /// <summary>
         /// Spaceship constructor
@@ -47,15 +54,12 @@ namespace XNAProject
             DisplacementUpdateInterval = displacementUpdateInterval;
         }
 
-        /// <summary>
-        /// Allows the game component to perform any initialization it needs to before starting
-        /// to run.  This is where it can query for any required services and load content.
-        /// </summary>
-        public override void Initialize()
+        protected override void LoadContent()
         {
-            // TODO: Add your initialization code here
+            base.LoadContent();
 
-            base.Initialize();
+            InputMgr = Game.Services.GetService(typeof(InputManager)) as InputManager;
+
         }
 
         /// <summary>
