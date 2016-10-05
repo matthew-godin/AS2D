@@ -17,15 +17,26 @@ using Microsoft.Xna.Framework.Media;
 
 //CLASS VERY INCOMPLETE!!
 
-namespace AS2D_2016
+namespace XNAProject
 {
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
     public class Spaceship : AnimatedSprite
     {
+        //Property initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
 
+        /// <summary>
+        /// Spaceship constructor
+        /// </summary>
+        /// <param name="game">Game object</param>
+        /// <param name="imageName">Image name (string)</param>
+        /// <param name="position">Position (Vector2)</param>
+        /// <param name="displayZonee">Display zone (Rectangle)</param>
+        /// <param name="imageDescription">Image description (Vector2)</param>
+        /// <param name="animationUpdateInterval">Animation update interval (float)</param>
+        /// <param name="displacementUpdateInterval">Displacement update interval (float)</param>
         public Spaceship(Game game, string imageName,
                                Vector2 position, Rectangle displayZonee,
                                Vector2 imageDescription, float animationUpdateInterval,
