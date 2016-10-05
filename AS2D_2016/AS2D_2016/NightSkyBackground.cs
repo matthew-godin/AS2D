@@ -1,8 +1,8 @@
 ﻿/* Author :            Raphael Brule
    File :           NightSkyBackground.cs
-   Date :              18 September 2016
+   Date :              5 October 2016
    Description :       This DrawableGameComponent allows the background
-                       to move.*/
+                       to move top to bottom repeatedly.*/
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -48,7 +48,7 @@ namespace XNAProject
         public override void Initialize()
         {
             TimeElapsedSinceUpdate = 0;
-            DisplayZoneFirstImage = new Rectangle(-Game.Window.ClientBounds.Width, 0,
+            DisplayZoneFirstImage = new Rectangle(0, -Game.Window.ClientBounds.Height,
                             Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
             DisplayZoneSecondImage = new Rectangle(0, 0, 
                             Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
@@ -89,20 +89,20 @@ namespace XNAProject
         /// </summary>
         private void ManageBackgroundImage()
         {
-            DisplayZoneFirstImage = new Rectangle(DisplayZoneFirstImage.X + 1, 0,
+            DisplayZoneFirstImage = new Rectangle(0, DisplayZoneFirstImage.Y + 1,
                         Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
-            DisplayZoneSecondImage = new Rectangle(DisplayZoneSecondImage.X + 1, 0,
+            DisplayZoneSecondImage = new Rectangle(0, DisplayZoneSecondImage.Y + 1,
                         Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
 
-            if (DisplayZoneFirstImage.X > Game.Window.ClientBounds.Width)
+            if (DisplayZoneFirstImage.Y > Game.Window.ClientBounds.Height)
             {
-                DisplayZoneFirstImage = new Rectangle(-Game.Window.ClientBounds.Width + 1, 0,
+                DisplayZoneFirstImage = new Rectangle(0, -Game.Window.ClientBounds.Height + 1,
                         Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
             }
 
-            if (DisplayZoneSecondImage.X > Game.Window.ClientBounds.Width)
+            if (DisplayZoneSecondImage.Y > Game.Window.ClientBounds.Height)
             {
-                DisplayZoneSecondImage = new Rectangle(-Game.Window.ClientBounds.Width + 1, 0,
+                DisplayZoneSecondImage = new Rectangle(0, -Game.Window.ClientBounds.Height + 1,
                         Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
             }
         }
