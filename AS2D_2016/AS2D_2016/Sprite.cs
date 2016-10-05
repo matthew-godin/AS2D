@@ -18,12 +18,15 @@ namespace XNAProject
 {
     public class Sprite : Microsoft.Xna.Framework.DrawableGameComponent, ICollidable
     {
+        //Properties initially managed by the constructor
         string ImageName { get; set; }
         protected Vector2 Position { get; set; }
-        protected Texture2D Image { get; private set; }
+        protected Rectangle DisplayZone { get; set; }
+
+        //Properties initially managed by LoadContent
         protected SpriteBatch SpriteMgr { get; private set; }
         RessourcesManager<Texture2D> TexturesMgr { get; set; }
-        protected Rectangle DisplayZone { get; set; }
+        protected Texture2D Image { get; private set; }
 
         public Sprite(Game game, string imageName, Vector2 position, Rectangle displayZone) : base(game)
         {
