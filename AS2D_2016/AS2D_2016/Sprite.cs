@@ -1,4 +1,15 @@
+/*
+Sprite.cs
+---------
 
+By Matthew Godin
+
+Role : DrawableGameComponent
+       inheriting from ICollidable that displays
+       a sprite using Texture2D
+
+Created : 5 October 2016
+*/
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -31,6 +42,10 @@ namespace XNAProject
         public override void Draw(GameTime gameTime)
         {
             SpriteMgr.Draw(Image, Position, Color.White);
+        }
+        public bool IsColliding(object otherObject)
+        {
+            //To implement
         }
     }
 }
