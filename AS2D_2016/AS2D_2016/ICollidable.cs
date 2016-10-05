@@ -3,7 +3,7 @@
    Date :              05 October 2016
    Description :       This interface represents a collidable object.*/
 
-namespace AS2D_2016
+namespace XNAProject
 {
     interface ICollidable
     {
