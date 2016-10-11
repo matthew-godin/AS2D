@@ -48,6 +48,7 @@ namespace XNAProject
             Components.Add(new NightSkyBackground(this, "NightSky", STANDARD_INTERVAL));
             Components.Add(new AS2D(this));
             Components.Add(new FPSDisplay(this, "Arial", Color.Tomato, FPS_INTERVAL));
+            /* TEMPORARY */ Components.Add(new CenteredText(this, "Congratulations, you have reached level " + "4", "Arial", new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.Red, 0.2f));
             base.Initialize();
         }
 

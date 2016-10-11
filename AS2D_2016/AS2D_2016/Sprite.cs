@@ -10,7 +10,7 @@ Role : DrawableGameComponent
 
 Created : 5 October 2016
 */
-using Microsoft.Xna.Framework;
+/*using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 
@@ -52,3 +52,4 @@ namespace XNAProject
         }
     }
 }
+*/
