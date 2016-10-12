@@ -15,12 +15,11 @@ namespace XNAProject
     {
         public const float FPS_INTERVAL = 1f;
         public const float STANDARD_INTERVAL = 1f / 60f;
+
         GraphicsDeviceManager GraphicsMgr { get; set; }
         SpriteBatch SpriteMgr { get; set; }
-
         RessourcesManager<SpriteFont> FontsMgr { get; set; }
         RessourcesManager<Texture2D> TexturesMgr { get; set; }
-
         InputManager InputMgr { get; set; }
 
         public GameProject()
