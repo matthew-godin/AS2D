@@ -47,7 +47,8 @@ namespace XNAProject
         /// <param name="displayZonee">Sprite's display zone</param>
         /// <param name="imageDescription">Number of x and y sprites in loaded image</param>
         /// <param name="animationUpdateInterval">Sprite animation update interval</param>
-        public AnimatedSprite(Game game, string imageName, Vector2 position, Rectangle displayZonee, Vector2 imageDescription, float animationUpdateInterval) : base(game, imageName, position, displayZonee)
+        public AnimatedSprite(Game game, string imageName, Vector2 position, Rectangle displayZonee, Vector2 imageDescription, float animationUpdateInterval) 
+            : base(game, imageName, position, displayZonee)
         {
             ImageDescription = new Vector2(imageDescription.X, imageDescription.Y);
             AnimationUpdateInterval = animationUpdateInterval;
