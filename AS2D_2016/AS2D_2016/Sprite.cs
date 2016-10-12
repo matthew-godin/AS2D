@@ -24,8 +24,8 @@ namespace XNAProject
     public class Sprite : Microsoft.Xna.Framework.DrawableGameComponent, ICollidable
     {
         const int HALF_SIZE_DIVISOR = 2;
-        const float NO_DEPTH_LAYER = 0.0F;
-        const float NO_ROTATION = 0.0F;
+        //const float NO_DEPTH_LAYER = 0.0F;
+        //const float NO_ROTATION = 0.0F;
         const float NULL_Y = 0.0F;
         const float NULL_X = 0.0F;
         const float NULL_HEIGHT = 0.0F;
@@ -38,8 +38,8 @@ namespace XNAProject
         RessourcesManager<Texture2D> TexturesMgr { get; set; }
         protected Texture2D Image { get; set; }
         float Scale { get; set; }
-        Vector2 Origin { get; set; }
-        Rectangle RectangleImageDimensionsScaled { get; set; }
+        //Vector2 Origin { get; set; }
+        protected Rectangle RectangleImageDimensionsScaled { get; set; }
 
         /// <summary>
         /// Sprite's constructor
@@ -62,8 +62,8 @@ namespace XNAProject
         {
             base.Initialize();
             Scale = ComputeScale();
-            Origin = new Vector2(NULL_X, NULL_Y);
-            RectangleImageDimensionsScaled = new Rectangle((int)NULL_X, (int)NULL_Y, (int)(Image.Width * Scale), (int)(Image.Height * Scale));
+            //Origin = new Vector2(NULL_X, NULL_Y);
+            RectangleImageDimensionsScaled = new Rectangle(DisplayZone.X, DisplayZone.Y, (int)(Image.Width * Scale), (int)(Image.Height * Scale));
         }
 
         /// <summary>
@@ -93,7 +93,9 @@ namespace XNAProject
         /// <param name="gameTime">Contains time information</param>
         public override void Draw(GameTime gameTime)
         {
-            SpriteMgr.Draw(Image, Position, DisplayZone, Color.White, NO_ROTATION, Origin, Scale, SpriteEffects.None, NO_DEPTH_LAYER);
+            //SpriteMgr.Draw(Image, Position, DisplayZone, Color.White, NO_ROTATION, Origin, Scale, SpriteEffects.None, NO_DEPTH_LAYER);
+
+            SpriteMgr.Draw(Image, RectangleImageDimensionsScaled, Color.White);
         }
 
         /// <summary>
