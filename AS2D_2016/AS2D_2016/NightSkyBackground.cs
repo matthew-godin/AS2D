@@ -4,6 +4,12 @@
    Description :       This DrawableGameComponent allows the background
                        to move top to bottom repeatedly.*/
 
+ 
+// Co-Author : Matthew Godin
+// Modified : 11 October 2016
+//Description : The entirety of the code has been modified to make the background
+//              functional and not crushed
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,112 +17,115 @@ using Microsoft.Xna.Framework.Graphics;
 namespace XNAProject
 {
     /// <summary>
-    /// This is a game component that implements IUpdateable.
+    /// Component displaying a background slowly moving from top to bottom
     /// </summary>
     public class NightSkyBackground : Microsoft.Xna.Framework.DrawableGameComponent
     {
-        //Properties initially managed by the constructor
-        string ImageName { get; set; }
+        const float NO_TIME_ELAPSED = 0.0F;
+        const float NULL_Y = 0.0F;
+        const float NULL_X = 0.0F;
+        const float Y_INCREMENT = 0.3F;
+        const float SCALE = 4.0F / 7.0F;
+        const float NO_ANGLE = 0.0F;
+        const float NO_LAYER_DEPTH = 0.0F;
+
         float UpdateInterval { get; set; }
-
-        //Properties initially managed by Initialize
         float TimeElapsedSinceUpdate { get; set; }
-        Rectangle DisplayZoneFirstImage { get; set; }
-        Rectangle DisplayZoneSecondImage { get; set; }
-
-        //Properties initially managed by LoadContent
+        float ScaledImageHeight { get; set; }
+        Vector2 IncrementVector { get; set; }
+        Vector2 FirstBackgroundPosition { get; set; }
+        Vector2 SecondBackgroundPosition { get; set; }
+        Vector2 NullOrigin { get; set; }
         SpriteBatch SpriteMgr { get; set; }
+        string ImageName { get; set; }
         Texture2D BackgroundImage { get; set; }
 
         /// <summary>
-        /// DrawableGameComponent constructor
+        /// Night sky background constructor
         /// </summary>
         /// <param name="game">Game object</param>
-        /// <param name="imageName">Image name (string)</param>
-        /// <param name="updateInterval">Update interval (float)</param>
-        public NightSkyBackground(Game game, string imageName, float updateInterval)
-            : base(game)
+        /// <param name="imageName">String representing background image to display file name</param>
+        /// <param name="updateInterval">Update interval by which the background must move</param>
+        public NightSkyBackground(Game game, string imageName, float updateInterval) : base(game)
         {
             ImageName = imageName;
             UpdateInterval = updateInterval;
         }
 
         /// <summary>
-        /// Allows the game component to perform any initialization it needs to before starting
-        /// to run.  This is where it can query for any required services and load content.
+        /// Method intializing the different properties of the night sky background
         /// </summary>
         public override void Initialize()
         {
-            TimeElapsedSinceUpdate = 0;
-            DisplayZoneFirstImage = new Rectangle(0, -Game.Window.ClientBounds.Height,
-                            Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
-            DisplayZoneSecondImage = new Rectangle(0, 0, 
-                            Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
-
+            TimeElapsedSinceUpdate = NO_TIME_ELAPSED;
+            NullOrigin = new Vector2(NULL_X, NULL_Y);
+            IncrementVector = new Vector2(NULL_X, Y_INCREMENT);
             base.Initialize();
+            ScaledImageHeight = BackgroundImage.Height * SCALE;
+            ReplaceBackgrounds();
         }
 
         /// <summary>
-        /// Loads more content
+        /// Swaps backgrounds indefinitely and moves them down slowly
+        /// </summary>
+        void ReplaceBackgrounds()
+        {
+            FirstBackgroundPosition = new Vector2(NULL_X, NULL_Y);
+            SecondBackgroundPosition = new Vector2(NULL_X, -ScaledImageHeight);
+        }
+
+        /// <summary>
+        /// Loads content needed by the night sky background
         /// </summary>
         protected override void LoadContent()
         {
             SpriteMgr = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
             BackgroundImage = Game.Content.Load<Texture2D>("Textures/" + ImageName);
-            base.LoadContent();
         }
 
         /// <summary>
-        /// Allows the game component to update itself.
+        /// Method updating the content and takes care of time management
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="gameTime">Contains time information</param>
         public override void Update(GameTime gameTime)
         {
-            float timeElapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            TimeElapsedSinceUpdate += timeElapsed;
+            TimeElapsedSinceUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            VerifierSiIncrementationNecessaire();
+        }
 
+        /// <summary>
+        /// Checks if enough time has elapsed to move or even swap the backgrounds
+        /// </summary>
+        void VerifierSiIncrementationNecessaire()
+        {
             if (TimeElapsedSinceUpdate >= UpdateInterval)
             {
-                ManageBackgroundImage();
-
-                TimeElapsedSinceUpdate = 0;
+                TimeElapsedSinceUpdate = NO_TIME_ELAPSED;
+                FirstBackgroundPosition += IncrementVector;
+                SecondBackgroundPosition += IncrementVector;
+                VerifyIfSwappingNecessary();
             }
-            base.Update(gameTime);
         }
 
         /// <summary>
-        /// Manages the background images
+        /// Swap backgrounds if needed
         /// </summary>
-        private void ManageBackgroundImage()
+        void VerifyIfSwappingNecessary()
         {
-            DisplayZoneFirstImage = new Rectangle(0, DisplayZoneFirstImage.Y + 1,
-                        Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
-            DisplayZoneSecondImage = new Rectangle(0, DisplayZoneSecondImage.Y + 1,
-                        Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
-
-            if (DisplayZoneFirstImage.Y > Game.Window.ClientBounds.Height)
+            if (FirstBackgroundPosition.Y >= ScaledImageHeight)
             {
-                DisplayZoneFirstImage = new Rectangle(0, -Game.Window.ClientBounds.Height + 1,
-                        Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
-            }
-
-            if (DisplayZoneSecondImage.Y > Game.Window.ClientBounds.Height)
-            {
-                DisplayZoneSecondImage = new Rectangle(0, -Game.Window.ClientBounds.Height + 1,
-                        Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height);
+                ReplaceBackgrounds();
             }
         }
 
         /// <summary>
-        /// Manages the images
+        /// Draws the two backgrounds
         /// </summary>
-        /// <param name="gameTime"></param>
+        /// <param name="gameTime">Contains time information</param>
         public override void Draw(GameTime gameTime)
         {
-            SpriteMgr.Draw(BackgroundImage, DisplayZoneFirstImage, Color.White);
-            SpriteMgr.Draw(BackgroundImage, DisplayZoneSecondImage, Color.White);
-
-            base.Draw(gameTime);
+            SpriteMgr.Draw(BackgroundImage, FirstBackgroundPosition, null, Color.White, NO_ANGLE, NullOrigin, SCALE, SpriteEffects.None, NO_LAYER_DEPTH);
+            SpriteMgr.Draw(BackgroundImage, SecondBackgroundPosition, null, Color.White, NO_ANGLE, NullOrigin, SCALE, SpriteEffects.None, NO_LAYER_DEPTH);
         }
     }
 }

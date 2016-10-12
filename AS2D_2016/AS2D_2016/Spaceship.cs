@@ -4,7 +4,7 @@
    Description :       This component, child of AnimatedSprite,
                        manages the spaceship.*/
 
-using System;
+/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -73,4 +73,4 @@ namespace XNAProject
             base.Update(gameTime);
         }
     }
-}
+}*/

@@ -11,7 +11,7 @@ Role : Component inheriting from Sprite and
 
 Created : 5 October 2016
 */
-using Microsoft.Xna.Framework;
+/*using Microsoft.Xna.Framework;
 
 namespace XNAProject
 {
@@ -89,4 +89,4 @@ namespace XNAProject
             SpriteMgr.Draw(Image, Position, SourceRectangle, Color.White);
         }
     }
-}
+}*/

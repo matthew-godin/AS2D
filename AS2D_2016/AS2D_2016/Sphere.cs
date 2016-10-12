@@ -16,7 +16,7 @@ using Microsoft.Xna.Framework.Media;
 
 //CLASS VERY INCOMPLETE!!
 
-namespace XNAProject
+/*namespace XNAProject
 {
     /// <summary>
     /// This is a game component that implements IUpdateable.
@@ -68,3 +68,4 @@ namespace XNAProject
         }
     }
 }
+*/
