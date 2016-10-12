@@ -79,7 +79,8 @@ namespace XNAProject
             Delta = new Vector2(Image.Width, Image.Height) / ImageDescription;
             RightMargin = Game.Window.ClientBounds.Width - (int)Delta.X;
             BottomMargin = Game.Window.ClientBounds.Height - (int)Delta.Y;
-            LeftMargin = 0; TopMargin = 0;
+            LeftMargin = 0;
+            TopMargin = 0;
         }
 
         /// <summary>
