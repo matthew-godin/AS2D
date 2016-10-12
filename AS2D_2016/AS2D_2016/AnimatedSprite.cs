@@ -58,15 +58,26 @@ namespace XNAProject
         }
 
         /// <summary>
+        /// Initializes AnimatedSprite's components
+        /// </summary>
+        public override void Initialize()
+        {
+            SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
+            ToDestroy = false;
+            TimeElapsedSinceUpdate = 0;
+            Row = 0;
+            TopMargin = 0;
+            LeftMargin = 0;
+            base.Initialize();
+        }
+
+        /// <summary>
         /// Loading method
         /// </summary>
         protected override void LoadContent()
         {
             base.LoadContent();
-            SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
-            ToDestroy = false;
-            TimeElapsedSinceUpdate = 0;
-            Row = 0;
+            ComputeMargins();
         }
 
         /// <summary>
@@ -77,7 +88,6 @@ namespace XNAProject
             Delta = new Vector2(Image.Width, Image.Height) / ImageDescription;
             RightMargin = Game.Window.ClientBounds.Width - (int)Delta.X;
             BottomMargin = Game.Window.ClientBounds.Height - (int)Delta.Y;
-            LeftMargin = 0; TopMargin = 0;
         }
 
         /// <summary>
