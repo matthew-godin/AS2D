@@ -31,6 +31,9 @@ namespace XNAProject
         //fireball
         Rectangle SourceRectangle { get; set; }
         public bool ToDestroy { get; set; }
+        float TimeElapsedSinceUpdate { get; set; }
+        int Row { get; set; }
+        int VariableToChangeName { get; set; }
 
         //fireball
         protected Vector2 Delta { get; set; }
@@ -62,6 +65,8 @@ namespace XNAProject
             base.LoadContent();
             SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
             ToDestroy = false;
+            TimeElapsedSinceUpdate = 0;
+            Row = 0;
         }
 
         /// <summary>
@@ -80,7 +85,30 @@ namespace XNAProject
         /// </summary>
         protected virtual void PerformUpdate()
         {
-            ToDestroy = IsColliding(this);
+            if(Row == ImageDescription.Y)
+                Row = 0;
+
+            VariableToChangeName = (SourceRectangle.X + (int)Delta.X) % Image.Width;
+
+            SourceRectangle = new Rectangle(VariableToChangeName,
+                                   (int)Delta.Y * Row, (int)Delta.X, (int)Delta.Y);
+
+            if(VariableToChangeName == ImageDescription.X - 1)
+                ++Row;
+
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            //ToDestroy = IsColliding(this); LINE NOT GOOD TO CHANGE
+
+            float timeElapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            TimeElapsedSinceUpdate += timeElapsed;
+            if (TimeElapsedSinceUpdate >= AnimationUpdateInterval)
+            {
+                PerformUpdate();
+                TimeElapsedSinceUpdate = 0;
+            }
         }
 
         //protected virtual void AnimatedSpriteOnOneLine()//#linetomatthew
