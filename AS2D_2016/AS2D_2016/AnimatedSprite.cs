@@ -30,12 +30,13 @@ namespace XNAProject
         Vector2 ImageDescription { get; set; }
         float AnimationUpdateInterval { get; set; }
 
-        //fireball
-        Rectangle SourceRectangle { get; set; }
+        //Properties initially managed by Initialze
+        protected Rectangle SourceRectangle { get; set; }
         public bool ToDestroy { get; set; }
         float TimeElapsedSinceUpdate { get; set; }
-        int Row { get; set; }
-        int VariableToChangeName { get; set; }
+        //int Row { get; set; }
+        //int VariableToChangeName { get; set; }
+        protected Vector2 Delta { get; set; }
 
         /// <summary>
         /// AnimatedSprite's constructor
@@ -58,10 +59,11 @@ namespace XNAProject
         public override void Initialize()
         {
             SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
+            Delta = new Vector2(Image.Width, Image.Height) / ImageDescription;
             ToDestroy = false;
             TimeElapsedSinceUpdate = 0;
             //Row = 0;
-            Delta = new Vector2(Image.Width, Image.Height) / ImageDescription;
+
             base.Initialize();
         }
 
