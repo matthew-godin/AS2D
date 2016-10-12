@@ -77,7 +77,7 @@ namespace XNAProject
         /// <summary>
         /// Method update AnimatedSprite according to time elapsed
         /// </summary>
-        protected void PerformUpdate()
+        protected virtual void PerformUpdate()
         {
             SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width, SourceRectangle.X > Image.Width - (int)Delta.X ? (SourceRectangle.Y > Image.Height - (int)Delta.Y ? ORIGIN : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
             ToDestroy = IsColliding(this);
