@@ -16,15 +16,33 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace XNAProject
 {
+    /// <summary>
+    /// Sprite class from which most of this project's components inherit from
+    /// </summary>
     public class Sprite : Microsoft.Xna.Framework.DrawableGameComponent, ICollidable
     {
+        const int HALF_SIZE_DIVISOR = 2;
+        const float NO_DEPTH_LAYER = 0.0F;
+        const float NO_ROTATION = 0.0F;
+        const float NULL_Y = 0.0F;
+        const float NULL_X = 0.0F;
+
         string ImageName { get; set; }
         protected Vector2 Position { get; set; }
         protected Rectangle DisplayZone { get; set; }
         protected SpriteBatch SpriteMgr { get; private set; }
         RessourcesManager<Texture2D> TexturesMgr { get; set; }
         protected Texture2D Image { get; private set; }
+        float Scale { get; set; }
+        Vector2 Origin { get; set; }
 
+        /// <summary>
+        /// Sprite's constructor
+        /// </summary>
+        /// <param name="game">Game object</param>
+        /// <param name="imageName">Image file name</param>
+        /// <param name="position">Position where the sprite will be</param>
+        /// <param name="displayZone">Display zone in which we put the sprite</param>
         public Sprite(Game game, string imageName, Vector2 position, Rectangle displayZone) : base(game)
         {
             ImageName = imageName;
@@ -32,6 +50,30 @@ namespace XNAProject
             DisplayZone = displayZone;
         }
 
+        /// <summary>
+        /// Initializes what is needed by the sprite
+        /// </summary>
+        public override void Initialize()
+        {
+            base.Initialize();
+            Scale = ComputeScale();
+            Origin = new Vector2(NULL_X, NULL_Y);
+        }
+
+        /// <summary>
+        /// Computes scale by computing horizontal and vertical scale and the taking smallest
+        /// </summary>
+        /// <returns>The smallest of horizontal and vertical scales</returns>
+        float ComputeScale()
+        {
+            float horizontalScale = DisplayZone.Width / Image.Width, verticalScale = DisplayZone.Height / Image.Height;
+
+            return horizontalScale < verticalScale ? horizontalScale : verticalScale;
+        }
+
+        /// <summary>
+        /// Loads content needed by Sprite
+        /// </summary>
         protected override void LoadContent()
         {
             SpriteMgr = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
@@ -39,13 +81,23 @@ namespace XNAProject
             Image = TexturesMgr.Find(ImageName);
         }
 
+        /// <summary>
+        /// Method drawing sprite on the screen
+        /// </summary>
+        /// <param name="gameTime">Contains time information</param>
         public override void Draw(GameTime gameTime)
         {
-            SpriteMgr.Draw(Image, Position, Color.White);
+            SpriteMgr.Draw(Image, Position, DisplayZone, Color.White, NO_ROTATION, Origin, Scale, SpriteEffects.None, NO_DEPTH_LAYER);
         }
+
+        /// <summary>
+        /// True if Sprite is colliding with another object
+        /// </summary>
+        /// <param name="otherObject"></param>
+        /// <returns></returns>
         public bool IsColliding(object otherObject)
         {
-            //To implement
+            
         }
     }
 }
