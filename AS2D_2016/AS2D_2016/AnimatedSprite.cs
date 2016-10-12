@@ -34,8 +34,10 @@ namespace XNAProject
 
         //fireball
         protected Vector2 Delta { get; set; }
-        float RightMargin { get; set; }
-        float BottomMargin { get; set; }
+        protected int RightMargin { get; set; }
+        protected int BottomMargin { get; set; }
+        protected int LeftMargin { get; set; }
+        protected int TopMargin { get; set; }
 
         /// <summary>
         /// AnimatedSprite's constructor
@@ -72,6 +74,7 @@ namespace XNAProject
             Delta = new Vector2(Image.Width, Image.Height) / ImageDescription;
             RightMargin = Game.Window.ClientBounds.Width - (int)Delta.X;
             BottomMargin = Game.Window.ClientBounds.Height - (int)Delta.Y;
+            LeftMargin = 0; TopMargin = 0;
         }
 
         /// <summary>
@@ -79,9 +82,13 @@ namespace XNAProject
         /// </summary>
         protected virtual void PerformUpdate()
         {
-            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width, SourceRectangle.X > Image.Width - (int)Delta.X ? (SourceRectangle.Y > Image.Height - (int)Delta.Y ? ORIGIN : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
             ToDestroy = IsColliding(this);
         }
+
+        //protected virtual void AnimatedSpriteOnOneLine()//#linetomatthew
+        //{
+        //    SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width, SourceRectangle.X > Image.Width - (int)Delta.X ? (SourceRectangle.Y > Image.Height - (int)Delta.Y ? ORIGIN : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
+        //}
 
         /// <summary>
         /// Draws the AnimatedSprite
