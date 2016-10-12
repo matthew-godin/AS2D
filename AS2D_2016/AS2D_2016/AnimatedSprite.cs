@@ -85,6 +85,8 @@ namespace XNAProject
             ToDestroy = IsColliding(this);
         }
 
+
+
         //protected virtual void AnimatedSpriteOnOneLine()//#linetomatthew
         //{
         //    SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width, SourceRectangle.X > Image.Width - (int)Delta.X ? (SourceRectangle.Y > Image.Height - (int)Delta.Y ? ORIGIN : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
