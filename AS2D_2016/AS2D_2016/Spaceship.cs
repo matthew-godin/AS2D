@@ -4,7 +4,7 @@
    Description :       This component, child of AnimatedSprite,
                        manages the spaceship.*/
 
-/*using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -25,13 +25,13 @@ namespace XNAProject
     public class Spaceship : AnimatedSprite
     {
         //Constant
-        const int MOVING = 1;
+        const int NUM_PIXELS_MOVING = 1;
 
         //Property initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
 
-        int DeltaX { get; set; }
-        int DeltaY { get; set; }
+        //Property initially managed by LoadContent
+        bool IsMoving { get; set; }
         InputManager InputMgr { get; set; }
 
         /// <summary>
@@ -62,15 +62,61 @@ namespace XNAProject
 
         }
 
+        protected override void PerformUpdate()
+        {
+            base.PerformUpdate();
+            ManageKeyboard();
+            if (IsMoving)
+            {
+
+            }
+        }
+
+        void ManageKeyboard()
+        {
+            if (InputMgr.IsKeyboardActive)
+            {
+                int horizontalDisplacement = ManageKey(Keys.D) - ManageKey(Keys.A);
+                int displacementVertical = ManageKey(Keys.S) - ManageKey(Keys.W);
+                if (horizontalDisplacement != 0 || displacementVertical != 0)
+                {
+                    IsMoving = true;
+                    AdjustPosition(horizontalDisplacement, displacementVertical);
+                }
+                else
+                {
+                    IsMoving = false;
+                }
+            }
+        }
+
+        int ManageKey(Keys key)
+        {
+            return InputMgr.IsPressed(key) ? NUM_PIXELS_MOVING : 0;
+        }
+
+        void AdjustPosition(int horizontalDisplacement, int displacementVertical)
+        {
+            float posX = ComputePosition(horizontalDisplacement, Position.X, LeftMargin, RightMargin);
+            float posY = ComputePosition(displacementVertical, Position.Y, TopMargin, BottomMargin);
+            Position = new Vector2(posX, posY);
+        }
+
+        float ComputePosition(int displacement, float currentPosition, int MinThreshold, int MaxThreshold)
+        {
+            float position = currentPosition + displacement;
+            return MathHelper.Min(MathHelper.Max(MinThreshold, position), MaxThreshold);
+        }
+
         /// <summary>
         /// Allows the game component to update itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
+            PerformUpdate();
 
             base.Update(gameTime);
         }
     }
-}*/
+}
