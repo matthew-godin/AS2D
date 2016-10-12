@@ -11,14 +11,14 @@ Role : Component inheriting from Sprite and
 
 Created : 5 October 2016
 */
-/*using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace XNAProject
 {
     /// <summary>
     /// Component displaying an animated sprite showing different frames coming from the same image
     /// </summary>
-    public class AnimatedSprite : Sprite
+    public class AnimatedSprite : Sprite, IDestructible
     {
         //Constants
         const float NO_DISPLACEMENT = 0.0F;
@@ -30,6 +30,7 @@ namespace XNAProject
 
         //fireball
         Rectangle SourceRectangle { get; set; }
+        public bool ToDestroy { get; set; }
 
         //fireball
         protected Vector2 Delta { get; set; }
@@ -60,6 +61,7 @@ namespace XNAProject
         {
             base.LoadContent();
             SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
+            ToDestroy = false;
         }
 
         /// <summary>
@@ -78,6 +80,7 @@ namespace XNAProject
         protected void PerformUpdate()
         {
             SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width, SourceRectangle.X > Image.Width - (int)Delta.X ? (SourceRectangle.Y > Image.Height - (int)Delta.Y ? ORIGIN : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
+            ToDestroy = IsColliding(this);
         }
 
         /// <summary>
@@ -89,4 +92,4 @@ namespace XNAProject
             SpriteMgr.Draw(Image, Position, SourceRectangle, Color.White);
         }
     }
-}*/
+}
