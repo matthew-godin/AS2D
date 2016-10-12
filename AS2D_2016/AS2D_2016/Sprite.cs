@@ -40,7 +40,6 @@ namespace XNAProject
         float Scale { get; set; }
         //Vector2 Origin { get; set; }
         protected Rectangle RectangleImageDimensionsScaled { get; set; }
-        protected Vector2 Delta { get; set; }
         protected int RightMargin { get; set; }
         protected int BottomMargin { get; set; }
         protected int LeftMargin { get; set; }
