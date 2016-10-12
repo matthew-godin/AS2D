@@ -51,12 +51,24 @@ namespace XNAProject
         /// <param name="displayZonee">Sprite's display zone</param>
         /// <param name="imageDescription">Number of x and y sprites in loaded image</param>
         /// <param name="animationUpdateInterval">Sprite animation update interval</param>
-        public AnimatedSprite(Game game, string imageName, Vector2 position, Rectangle displayZonee,
-                           Vector2 imageDescription, float animationUpdateInterval) 
-            : base(game, imageName, position, displayZonee)
+        public AnimatedSprite(Game game, string imageName, Vector2 position, Rectangle displayZonee, Vector2 imageDescription, float animationUpdateInterval) : base(game, imageName, position, displayZonee)
         {
             ImageDescription = new Vector2(imageDescription.X, imageDescription.Y);
             AnimationUpdateInterval = animationUpdateInterval;
+        }
+
+        /// <summary>
+        /// Initializes AnimatedSprite's components
+        /// </summary>
+        public override void Initialize()
+        {
+            SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
+            ToDestroy = false;
+            TimeElapsedSinceUpdate = 0;
+            Row = 0;
+            TopMargin = 0;
+            LeftMargin = 0;
+            base.Initialize();
         }
 
         /// <summary>
@@ -65,10 +77,7 @@ namespace XNAProject
         protected override void LoadContent()
         {
             base.LoadContent();
-            SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
-            ToDestroy = false;
-            TimeElapsedSinceUpdate = 0;
-            Row = 0;
+            ComputeMargins();
         }
 
         /// <summary>
@@ -79,8 +88,6 @@ namespace XNAProject
             Delta = new Vector2(Image.Width, Image.Height) / ImageDescription;
             RightMargin = Game.Window.ClientBounds.Width - (int)Delta.X;
             BottomMargin = Game.Window.ClientBounds.Height - (int)Delta.Y;
-            LeftMargin = 0;
-            TopMargin = 0;
         }
 
         /// <summary>
