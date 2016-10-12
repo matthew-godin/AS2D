@@ -36,7 +36,7 @@ namespace XNAProject
         Rectangle DisplayZone { get; set; }
         SpriteBatch SpriteMgr { get; set; }
         RessourcesManager<Texture2D> TexturesMgr { get; set; }
-        Texture2D Image { get; set; }
+        protected Texture2D Image { get; set; }
         float Scale { get; set; }
         Vector2 Origin { get; set; }
         Rectangle RectangleImageDimensionsScaled { get; set; }
