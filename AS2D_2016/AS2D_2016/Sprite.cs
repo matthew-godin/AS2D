@@ -9,6 +9,8 @@ Role : DrawableGameComponent
        a sprite using Texture2D
 
 Created : 5 October 2016
+Modified : 12 October 2016
+Description : Now shows scaled and IsColliding is implemented
 */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,15 +28,18 @@ namespace XNAProject
         const float NO_ROTATION = 0.0F;
         const float NULL_Y = 0.0F;
         const float NULL_X = 0.0F;
+        const float NULL_HEIGHT = 0.0F;
+        const float NULL_WIDTH = 0.0F;
 
         string ImageName { get; set; }
         protected Vector2 Position { get; set; }
-        protected Rectangle DisplayZone { get; set; }
-        protected SpriteBatch SpriteMgr { get; private set; }
+        Rectangle DisplayZone { get; set; }
+        SpriteBatch SpriteMgr { get; set; }
         RessourcesManager<Texture2D> TexturesMgr { get; set; }
-        protected Texture2D Image { get; private set; }
+        Texture2D Image { get; set; }
         float Scale { get; set; }
         Vector2 Origin { get; set; }
+        Rectangle RectangleImageDimensionsScaled { get; set; }
 
         /// <summary>
         /// Sprite's constructor
@@ -58,6 +63,7 @@ namespace XNAProject
             base.Initialize();
             Scale = ComputeScale();
             Origin = new Vector2(NULL_X, NULL_Y);
+            RectangleImageDimensionsScaled = new Rectangle((int)NULL_X, (int)NULL_Y, (int)(Image.Width * Scale), (int)(Image.Height * Scale));
         }
 
         /// <summary>
@@ -97,7 +103,10 @@ namespace XNAProject
         /// <returns></returns>
         public bool IsColliding(object otherObject)
         {
-            
+            Sprite otherSprite = (Sprite)otherObject;
+            Rectangle rectangleCollision = Rectangle.Intersect(RectangleImageDimensionsScaled, otherSprite.RectangleImageDimensionsScaled);
+
+            return rectangleCollision.Width == NULL_WIDTH && rectangleCollision.Height == NULL_HEIGHT;
         }
     }
 }
