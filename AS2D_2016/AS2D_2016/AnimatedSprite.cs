@@ -10,6 +10,8 @@ Role : Component inheriting from Sprite and
        frames in the same loaded image
 
 Created : 5 October 2016
+Modified : 12 October 2016
+Description : Large modifications for IsColliding to make ToDestroy and others
 */
 using Microsoft.Xna.Framework;
 
@@ -35,13 +37,6 @@ namespace XNAProject
         int Row { get; set; }
         int VariableToChangeName { get; set; }
 
-        //fireball
-        protected Vector2 Delta { get; set; }
-        protected int RightMargin { get; set; }
-        protected int BottomMargin { get; set; }
-        protected int LeftMargin { get; set; }
-        protected int TopMargin { get; set; }
-
         /// <summary>
         /// AnimatedSprite's constructor
         /// </summary>
@@ -65,29 +60,9 @@ namespace XNAProject
             SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
             ToDestroy = false;
             TimeElapsedSinceUpdate = 0;
-            Row = 0;
-            TopMargin = 0;
-            LeftMargin = 0;
-            base.Initialize();
-        }
-
-        /// <summary>
-        /// Loading method
-        /// </summary>
-        protected override void LoadContent()
-        {
-            base.LoadContent();
-            ComputeMargins();
-        }
-
-        /// <summary>
-        /// Computes the sprite's margins
-        /// </summary>
-        protected void ComputeMargins()
-        {
+            //Row = 0;
             Delta = new Vector2(Image.Width, Image.Height) / ImageDescription;
-            RightMargin = Game.Window.ClientBounds.Width - (int)Delta.X;
-            BottomMargin = Game.Window.ClientBounds.Height - (int)Delta.Y;
+            base.Initialize();
         }
 
         /// <summary>
@@ -95,17 +70,17 @@ namespace XNAProject
         /// </summary>
         protected virtual void PerformUpdate()
         {
-            if(Row == ImageDescription.Y)
-                Row = 0;
+            //if(Row == ImageDescription.Y)
+            //    Row = 0;
 
-            VariableToChangeName = (SourceRectangle.X + (int)Delta.X) % Image.Width;
+            //VariableToChangeName = (SourceRectangle.X + (int)Delta.X) % Image.Width;
 
-            SourceRectangle = new Rectangle(VariableToChangeName,
-                                   (int)Delta.Y * Row, (int)Delta.X, (int)Delta.Y);
+            //SourceRectangle = new Rectangle(VariableToChangeName,
+            //                       (int)Delta.Y * Row, (int)Delta.X, (int)Delta.Y);
 
-            if(VariableToChangeName == ImageDescription.X - 1)
-                ++Row;
-
+            //if(VariableToChangeName == ImageDescription.X - 1)
+            //    ++Row;
+            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width, SourceRectangle.X > Image.Width - (int)Delta.X ? (SourceRectangle.Y > Image.Height - (int)Delta.Y ? ORIGIN : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
         }
 
         public override void Update(GameTime gameTime)
@@ -121,11 +96,6 @@ namespace XNAProject
             }
         }
 
-        //protected virtual void AnimatedSpriteOnOneLine()//#linetomatthew
-        //{
-        //    SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width, SourceRectangle.X > Image.Width - (int)Delta.X ? (SourceRectangle.Y > Image.Height - (int)Delta.Y ? ORIGIN : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
-        //}
-
         /// <summary>
         /// Draws the AnimatedSprite
         /// </summary>
@@ -133,6 +103,23 @@ namespace XNAProject
         public override void Draw(GameTime gameTime)
         {
             SpriteMgr.Draw(Image, Position, SourceRectangle, Color.White);
+        }
+
+        /// <summary>
+        /// Predicate true if the Sprite is in collision with another object
+        /// </summary>
+        /// <param name="otherObject"></param>
+        /// <returns></returns>
+        public override bool IsColliding(object otherObject)
+        {
+            AnimatedSprite otherSprite = (AnimatedSprite)otherObject;
+            Rectangle rectangleCollision = Rectangle.Intersect(RectangleImageDimensionsÀLScale, otherSprite.RectangleImageDimensionsÀLScale);
+            bool collision = rectangleCollision.Width == NULL_WIDTH && rectangleCollision.Height == NULL_HEIGHT;
+
+            ToDestroy = collision;
+            otherSprite.ToDestroy = collision;
+
+            return collision;
         }
     }
 }

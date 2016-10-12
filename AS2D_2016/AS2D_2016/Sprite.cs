@@ -26,10 +26,10 @@ namespace XNAProject
         const int HALF_SIZE_DIVISOR = 2;
         //const float NO_DEPTH_LAYER = 0.0F;
         //const float NO_ROTATION = 0.0F;
-        const float NULL_Y = 0.0F;
-        const float NULL_X = 0.0F;
-        const float NULL_HEIGHT = 0.0F;
-        const float NULL_WIDTH = 0.0F;
+        protected const int NULL_Y = 0;
+        protected const int NULL_X = 0;
+        protected const int NULL_HEIGHT = 0;
+        protected const int NULL_WIDTH = 0;
 
         string ImageName { get; set; }
         protected Vector2 Position { get; set; }
@@ -40,6 +40,11 @@ namespace XNAProject
         float Scale { get; set; }
         //Vector2 Origin { get; set; }
         protected Rectangle RectangleImageDimensionsScaled { get; set; }
+        protected Vector2 Delta { get; set; }
+        protected int RightMargin { get; set; }
+        protected int BottomMargin { get; set; }
+        protected int LeftMargin { get; set; }
+        protected int TopMargin { get; set; }
 
         /// <summary>
         /// Sprite's constructor
@@ -64,6 +69,8 @@ namespace XNAProject
             Scale = ComputeScale();
             //Origin = new Vector2(NULL_X, NULL_Y);
             RectangleImageDimensionsScaled = new Rectangle(DisplayZone.X, DisplayZone.Y, (int)(Image.Width * Scale), (int)(Image.Height * Scale));
+            TopMargin = NULL_HEIGHT;
+            LeftMargin = NULL_WIDTH;
         }
 
         /// <summary>
@@ -85,6 +92,7 @@ namespace XNAProject
             SpriteMgr = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
             TexturesMgr = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
             Image = TexturesMgr.Find(ImageName);
+            ComputeMargins();
         }
 
         /// <summary>
@@ -103,12 +111,24 @@ namespace XNAProject
         /// </summary>
         /// <param name="otherObject"></param>
         /// <returns></returns>
-        public bool IsColliding(object otherObject)
+        public virtual bool IsColliding(object otherObject)
         {
-            Sprite otherSprite = (Sprite)otherObject;
+            AnimatedSprite otherSprite = (AnimatedSprite)otherObject;
             Rectangle rectangleCollision = Rectangle.Intersect(RectangleImageDimensionsScaled, otherSprite.RectangleImageDimensionsScaled);
+            bool collision = rectangleCollision.Width == NULL_WIDTH && rectangleCollision.Height == NULL_HEIGHT;
 
-            return rectangleCollision.Width == NULL_WIDTH && rectangleCollision.Height == NULL_HEIGHT;
+            otherSprite.ToDestroy = collision;
+
+            return collision;
+        }
+
+        /// <summary>
+        /// Computes the sprite's margins
+        /// </summary>
+        protected void ComputeMargins()
+        {
+            RightMargin = Game.Window.ClientBounds.Width - RectangleImageDimensionsScaled.Width;
+            BottomMargin = Game.Window.ClientBounds.Height - RectangleImageDimensionsScaled.Height;
         }
     }
 }
