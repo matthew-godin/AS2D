@@ -30,12 +30,13 @@ namespace XNAProject
         Vector2 ImageDescription { get; set; }
         float AnimationUpdateInterval { get; set; }
 
-        //fireball
-        Rectangle SourceRectangle { get; set; }
+        //Properties initially managed by Initialze
+        protected Rectangle SourceRectangle { get; set; }
         public bool ToDestroy { get; set; }
         float TimeElapsedSinceUpdate { get; set; }
-        int Row { get; set; }
-        int VariableToChangeName { get; set; }
+        //int Row { get; set; }
+        //int VariableToChangeName { get; set; }
+        protected Vector2 Delta { get; set; }
 
         /// <summary>
         /// AnimatedSprite's constructor
@@ -46,7 +47,8 @@ namespace XNAProject
         /// <param name="displayZonee">Sprite's display zone</param>
         /// <param name="imageDescription">Number of x and y sprites in loaded image</param>
         /// <param name="animationUpdateInterval">Sprite animation update interval</param>
-        public AnimatedSprite(Game game, string imageName, Vector2 position, Rectangle displayZonee, Vector2 imageDescription, float animationUpdateInterval) : base(game, imageName, position, displayZonee)
+        public AnimatedSprite(Game game, string imageName, Vector2 position, Rectangle displayZonee, Vector2 imageDescription, float animationUpdateInterval) 
+            : base(game, imageName, position, displayZonee)
         {
             ImageDescription = new Vector2(imageDescription.X, imageDescription.Y);
             AnimationUpdateInterval = animationUpdateInterval;
@@ -59,10 +61,11 @@ namespace XNAProject
         {
             LoadContent();
             SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
+            Delta = new Vector2(Image.Width, Image.Height) / ImageDescription;
             ToDestroy = false;
             TimeElapsedSinceUpdate = 0;
             //Row = 0;
-            Delta = new Vector2(Image.Width, Image.Height) / ImageDescription;
+
             base.Initialize();
         }
 

@@ -25,6 +25,8 @@ namespace XNAProject
     public class Spaceship : AnimatedSprite
     {
         //Constant
+        const int NOT_MOVING = 0;
+        const int MOVING = 1;
         const int NUM_PIXELS_MOVING = 1;
 
         //Property initially managed by the constructor
@@ -33,6 +35,8 @@ namespace XNAProject
         //Property initially managed by LoadContent
         bool IsMoving { get; set; }
         InputManager InputMgr { get; set; }
+
+        int VariableToChangeName { get; set; }
 
         /// <summary>
         /// Spaceship constructor
@@ -64,12 +68,11 @@ namespace XNAProject
 
         protected override void PerformUpdate()
         {
-            base.PerformUpdate();
             ManageKeyboard();
-            if (IsMoving)
-            {
 
-            }
+            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width,
+                                            (int)Delta.Y * (IsMoving ? MOVING : NOT_MOVING),
+                                            (int)Delta.X, (int)Delta.Y);
         }
 
         void ManageKeyboard()
@@ -108,15 +111,5 @@ namespace XNAProject
             return MathHelper.Min(MathHelper.Max(MinThreshold, position), MaxThreshold);
         }
 
-        /// <summary>
-        /// Allows the game component to update itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public override void Update(GameTime gameTime)
-        {
-            PerformUpdate();
-
-            base.Update(gameTime);
-        }
     }
 }
