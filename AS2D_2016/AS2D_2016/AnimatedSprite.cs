@@ -57,6 +57,7 @@ namespace XNAProject
         /// </summary>
         public override void Initialize()
         {
+            LoadContent();
             SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
             ToDestroy = false;
             TimeElapsedSinceUpdate = 0;
@@ -80,7 +81,7 @@ namespace XNAProject
 
             //if(VariableToChangeName == ImageDescription.X - 1)
             //    ++Row;
-            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width, SourceRectangle.X > Image.Width - (int)Delta.X ? (SourceRectangle.Y > Image.Height - (int)Delta.Y ? ORIGIN : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
+            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width, SourceRectangle.X >= Image.Width - (int)Delta.X ? (SourceRectangle.Y >= Image.Height - (int)Delta.Y ? ORIGIN : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
         }
 
         public override void Update(GameTime gameTime)

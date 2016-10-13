@@ -48,6 +48,7 @@ namespace XNAProject
             Components.Add(new AS2D(this));
             Components.Add(new FPSDisplay(this, "Arial", Color.Tomato, FPS_INTERVAL));
             /* TEMPORARY */ Components.Add(new CenteredText(this, "Congratulations, you have reached level " + "4", "Arial", new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.Red, 0.2f));
+            /* TEMPORARY */ Components.Add(new Sphere(this, "Sphere", Vector2.One, new Rectangle(0, 0, Window.ClientBounds.Width / 10, Window.ClientBounds.Height / 10), new Vector2(8, 4), 1.5f * STANDARD_INTERVAL, STANDARD_INTERVAL));
             base.Initialize();
         }
 

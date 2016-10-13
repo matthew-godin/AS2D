@@ -1,8 +1,15 @@
-﻿/* Author :            Raphael Brule
-   File :           Sphere.cs
-   Date :              05 October 2016
-   Description :       This component, child of AnimatedSprite, allows
-                       to manage a sphere.*/
+﻿/*
+Sphere.cs
+---------
+
+By Matthew Godin
+
+Role : Component inheriting from AnimatedSprite
+       showing a sphere bouncing on
+       the edges of the screen
+
+Created : 12 October 2016
+*/
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,58 +21,46 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-//CLASS VERY INCOMPLETE!!
-
-/*namespace XNAProject
+namespace XNAProject
 {
     /// <summary>
-    /// This is a game component that implements IUpdateable.
+    /// Sphere bouncing on the edges of the screen
     /// </summary>
     public class Sphere : AnimatedSprite
     {
-        //Properties initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
 
         /// <summary>
         /// Sphere constructor
         /// </summary>
         /// <param name="game">Game object</param>
-        /// <param name="imageName">Image name (string)</param>
-        /// <param name="position">Position (Vector2)</param>
-        /// <param name="displayZone">Display zone (Rectangle)</param>
-        /// <param name="imageDescription">Image description (Vector2)</param>
-        /// <param name="animationUpdateInterval">Animation update interval (float)</param>
-        /// <param name="displacementUpdateInterval">Displacement update interval (float)</param>
-        public Sphere(Game game, string imageName, Vector2 position,
-                      Rectangle displayZone, Vector2 imageDescription,
-                      float animationUpdateInterval, float displacementUpdateInterval)
-            : base(game, imageName, position, displayZone,
-                   imageDescription, animationUpdateInterval)
+        /// <param name="imageName">Sphere file name</param>
+        /// <param name="position">Sphere starting position</param>
+        /// <param name="displayZone">Sphere display zone</param>
+        /// <param name="imageDescription">Number of sphere sprites in x and y contained in the loaded image</param>
+        /// <param name="animationUpdateInterval">Sphere animation update interval</param>
+        public Sphere(Game game, string imageName, Vector2 position, Rectangle displayZone, Vector2 imageDescription, float animationUpdateInterval, float displacementUpdateInterval) : base(game, imageName, position, displayZone, imageDescription, animationUpdateInterval)
         {
             DisplacementUpdateInterval = displacementUpdateInterval;
         }
 
         /// <summary>
-        /// Allows the game component to perform any initialization it needs to before starting
-        /// to run.  This is where it can query for any required services and load content.
+        /// Initializes the sphere components
         /// </summary>
         public override void Initialize()
         {
-            // TODO: Add your initialization code here
 
             base.Initialize();
         }
 
         /// <summary>
-        /// Allows the game component to update itself.
+        /// Updates the sphere
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="gameTime">Contains time information</param>
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
 
             base.Update(gameTime);
         }
     }
 }
-*/
