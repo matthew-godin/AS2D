@@ -4,7 +4,7 @@ AnimatedSprite.cs
 
 By Matthew Godin
 
-Role : Component inheriting from Sprite and
+Role : Component inheriting from Sprite and 
        animates the sprite that will
        be displayed on the screen by showing different
        frames in the same loaded image

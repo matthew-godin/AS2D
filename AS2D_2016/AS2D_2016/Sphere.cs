@@ -28,7 +28,10 @@ namespace XNAProject
     /// </summary>
     public class Sphere : AnimatedSprite
     {
+        const int HALF_SIZE_DIVISOR = 2;
+
         float DisplacementUpdateInterval { get; set; }
+        Random RandomNumberGenerator { get; set; }
 
         /// <summary>
         /// Sphere constructor
@@ -49,8 +52,19 @@ namespace XNAProject
         /// </summary>
         public override void Initialize()
         {
-
+            LoadContent();
             base.Initialize();
+            /* Maybe +1 to generator cause excluded*/
+            Position = new Vector2(RandomNumberGenerator.Next(NULL_X, RightMargin), RandomNumberGenerator.Next(NULL_Y, BottomMargin / HALF_SIZE_DIVISOR));
+        }
+
+        /// <summary>
+        /// Loads content needed by the sphere
+        /// </summary>
+        protected override void LoadContent()
+        {
+            RandomNumberGenerator = Game.Services.GetService(typeof(Random)) as Random;
+            base.LoadContent();
         }
 
         /// <summary>
@@ -59,7 +73,6 @@ namespace XNAProject
         /// <param name="gameTime">Contains time information</param>
         public override void Update(GameTime gameTime)
         {
-
             base.Update(gameTime);
         }
     }
