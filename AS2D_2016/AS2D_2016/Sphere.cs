@@ -28,10 +28,12 @@ namespace XNAProject
     /// </summary>
     public class Sphere : AnimatedSprite
     {
-        const int HALF_SIZE_DIVISOR = 2;
+        const int STARTING_MINIMAL_DISPLACEMENT_ANGLE = 15, STARTING_MAXIMAL_DISPLACEMENT_ANGLE = 75;
 
         float DisplacementUpdateInterval { get; set; }
         Random RandomNumberGenerator { get; set; }
+        float TimeElpasedSinceDisplacementUpdate { get; set; }
+        float DisplacementAngle { get; set; }
 
         /// <summary>
         /// Sphere constructor
@@ -56,6 +58,7 @@ namespace XNAProject
             base.Initialize();
             /* Maybe +1 to generator cause excluded*/
             Position = new Vector2(RandomNumberGenerator.Next(NULL_X, RightMargin), RandomNumberGenerator.Next(NULL_Y, BottomMargin / HALF_SIZE_DIVISOR));
+            DisplacementAngle = RandomNumberGenerator.Next(STARTING_MINIMAL_DISPLACEMENT_ANGLE, STARTING_MAXIMAL_DISPLACEMENT_ANGLE);
         }
 
         /// <summary>
@@ -74,6 +77,20 @@ namespace XNAProject
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            TimeElpasedSinceDisplacementUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (TimeElpasedSinceDisplacementUpdate >= DisplacementUpdateInterval)
+            {
+                PerformDisplacementUpdate();
+                TimeElpasedSinceDisplacementUpdate = NO_TIME_ELAPSED;
+            }
+        }
+
+        /// <summary>
+        /// Method updating sphere displacement according to time elapsed
+        /// </summary>
+        protected virtual void PerformDisplacementUpdate()
+        {
+            Position += Vector2.UnitY;
         }
     }
 }

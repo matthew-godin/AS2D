@@ -66,7 +66,7 @@ namespace XNAProject
 
         }
 
-        protected override void PerformUpdate()
+        protected override void PerformAnimationUpdate()
         {
             ManageKeyboard();
 

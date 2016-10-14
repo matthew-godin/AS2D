@@ -23,8 +23,7 @@ namespace XNAProject
     public class AnimatedSprite : Sprite, IDestructible
     {
         //Constants
-        const float NO_DISPLACEMENT = 0.0F;
-        const int ORIGIN = 0;
+        protected const int NO_TIME_ELAPSED = 0, NO_DISPLACEMENT = 0, ORIGIN = 0;
 
         //fireball
         Vector2 ImageDescription { get; set; }
@@ -33,7 +32,7 @@ namespace XNAProject
         //Properties initially managed by Initialze
         protected Rectangle SourceRectangle { get; set; }
         public bool ToDestroy { get; set; }
-        float TimeElapsedSinceUpdate { get; set; }
+        float TimeElapsedSinceAnimationUpdate { get; set; }
         //int Row { get; set; }
         //int VariableToChangeName { get; set; }
         protected Vector2 Delta { get; set; }
@@ -63,7 +62,7 @@ namespace XNAProject
             SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
             Delta = new Vector2(Image.Width, Image.Height) / ImageDescription;
             ToDestroy = false;
-            TimeElapsedSinceUpdate = 0;
+            TimeElapsedSinceAnimationUpdate = 0;
             //Row = 0;
 
             base.Initialize();
@@ -72,7 +71,7 @@ namespace XNAProject
         /// <summary>
         /// Method update AnimatedSprite according to time elapsed
         /// </summary>
-        protected virtual void PerformUpdate()
+        protected virtual void PerformAnimationUpdate()
         {
             //if(Row == ImageDescription.Y)
             //    Row = 0;
@@ -91,12 +90,11 @@ namespace XNAProject
         {
             //ToDestroy = IsColliding(this); LINE NOT GOOD TO CHANGE
 
-            float timeElapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            TimeElapsedSinceUpdate += timeElapsed;
-            if (TimeElapsedSinceUpdate >= AnimationUpdateInterval)
+            TimeElapsedSinceAnimationUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (TimeElapsedSinceAnimationUpdate >= AnimationUpdateInterval)
             {
-                PerformUpdate();
-                TimeElapsedSinceUpdate = 0;
+                PerformAnimationUpdate();
+                TimeElapsedSinceAnimationUpdate = NO_TIME_ELAPSED;
             }
         }
 
