@@ -28,7 +28,7 @@ namespace XNAProject
     /// </summary>
     public class Sphere : AnimatedSprite
     {
-        const int STARTING_MINIMAL_DISPLACEMENT_ANGLE = 15, STARTING_MAXIMAL_DISPLACEMENT_ANGLE = 75, RIGHT_ANGLE = 90, MINIMAL_360_DEGREES_CIRCLE_FACTOR = 0, MAXIMAL_EXCLUSIVE_360_DEGREES_CIRCLE_FACTOR = 4;
+        const int STARTING_MINIMAL_DISPLACEMENT_ANGLE = 15, STARTING_MAXIMAL_DISPLACEMENT_ANGLE = 75, RIGHT_ANGLE = 90, MINIMAL_360_DEGREES_CIRCLE_FACTOR = 0, MAXIMAL_EXCLUSIVE_360_DEGREES_CIRCLE_FACTOR = 4, FLAT_ANGLE = 180, FULL_ANGLE = 360;
 
         float DisplacementUpdateInterval { get; set; }
         Random RandomNumberGenerator { get; set; }
@@ -93,7 +93,16 @@ namespace XNAProject
         protected virtual void PerformDisplacementUpdate()
         {
             Position += UpdateDisplacementUnitVector;
-            
+            if (Position.X <= LeftMargin || Position.X >= RightMargin)
+            {
+                DisplacementAngle = FLAT_ANGLE - DisplacementAngle;
+                UpdateDisplacementUnitVector = new Vector2((float)Math.Cos(MathHelper.ToRadians(DisplacementAngle)), (float)Math.Sin(MathHelper.ToRadians(DisplacementAngle)));
+            }
+            else if (Position.Y >= BottomMargin || Position.Y <= TopMargin)
+            {
+                DisplacementAngle = FULL_ANGLE - DisplacementAngle;
+                UpdateDisplacementUnitVector = new Vector2((float)Math.Cos(MathHelper.ToRadians(DisplacementAngle)), (float)Math.Sin(MathHelper.ToRadians(DisplacementAngle)));
+            }
         }
     }
 }
