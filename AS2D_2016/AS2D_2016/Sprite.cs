@@ -23,13 +23,9 @@ namespace XNAProject
     /// </summary>
     public class Sprite : Microsoft.Xna.Framework.DrawableGameComponent, ICollidable
     {
-        const int HALF_SIZE_DIVISOR = 2;
         //const float NO_DEPTH_LAYER = 0.0F;
         //const float NO_ROTATION = 0.0F;
-        protected const int NULL_Y = 0;
-        protected const int NULL_X = 0;
-        protected const int NULL_HEIGHT = 0;
-        protected const int NULL_WIDTH = 0;
+        protected const int NULL_Y = 0, NULL_X = 0, NULL_HEIGHT = 0, NULL_WIDTH = 0, HALF_SIZE_DIVISOR = 2;
 
         string ImageName { get; set; }
         protected Vector2 Position { get; set; }

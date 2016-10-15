@@ -15,8 +15,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-//CLASS VERY INCOMPLETE!!
-
 namespace XNAProject
 {
     /// <summary>
@@ -80,7 +78,7 @@ namespace XNAProject
             InputMgr = Game.Services.GetService(typeof(InputManager)) as InputManager;
         }
 
-        protected override void PerformUpdate()
+        protected override void PerformAnimationUpdate()
         {
             SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width,
                              (int)Delta.Y *AnimationAccordingToMove,
