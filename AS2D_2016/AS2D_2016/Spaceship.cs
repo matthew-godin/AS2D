@@ -142,5 +142,12 @@ namespace XNAProject
             return ResultingDisplacement != Vector2.Zero;
         }
 
+        //public override void Draw(GameTime gameTime)
+        //{
+        //    //SpriteMgr.Draw(Image, Position, SourceRectangle, Color.White);
+
+        //    SpriteMgr.Draw(Image, new Rectangle((int)Position.X, (int)Position.Y, (int)(Delta.X*Scale), (int)(Delta.Y*Scale)),
+        //                        SourceRectangle, Color.White);
+        //}
     }
 }
