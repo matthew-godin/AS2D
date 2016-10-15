@@ -67,7 +67,7 @@ namespace XNAProject
             base.Initialize();
             Scale = ComputeScale();
             //Origin = new Vector2(NULL_X, NULL_Y);
-            RectangleImageDimensionsScaled = new Rectangle(DisplayZone.X, DisplayZone.Y, (int)(Image.Width * Scale), (int)(Image.Height * Scale));
+            RectangleImageDimensionsScaled = new Rectangle((int)Position.X, (int)Position.Y, (int)(Image.Width * Scale), (int)(Image.Height * Scale));
             TopMargin = NULL_HEIGHT;
             LeftMargin = NULL_WIDTH;
         }
