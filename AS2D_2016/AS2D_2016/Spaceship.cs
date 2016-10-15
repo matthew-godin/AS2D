@@ -27,16 +27,22 @@ namespace XNAProject
         //Constant
         const int NOT_MOVING = 0;
         const int MOVING = 1;
-        const int NUM_PIXELS_MOVING = 1;
+        const int NUM_PIXELS_MOVING = 5;
 
         //Property initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
 
+        //Property initially managed by Initialize
+        float TimeSpentSinceUpdate { get; set; }
+        int AnimationAccordingToMove { get; set; }
+        Vector2 PreviousPosition { get; set; }
+
         //Property initially managed by LoadContent
-        bool IsMoving { get; set; }
         InputManager InputMgr { get; set; }
 
-        int VariableToChangeName { get; set; }
+        //to check
+        Vector2 ResultingDisplacement { get; set; }
+
 
         /// <summary>
         /// Spaceship constructor
@@ -58,21 +64,52 @@ namespace XNAProject
             DisplacementUpdateInterval = displacementUpdateInterval;
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            TimeSpentSinceUpdate = 0;
+            AnimationAccordingToMove = 0;
+            PreviousPosition = new Vector2(Position.X, Position.Y);
+        }
+
         protected override void LoadContent()
         {
             base.LoadContent();
 
             InputMgr = Game.Services.GetService(typeof(InputManager)) as InputManager;
-
         }
 
         protected override void PerformUpdate()
         {
+            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width,
+                             (int)Delta.Y *AnimationAccordingToMove,
+                             (int)Delta.X, (int)Delta.Y);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            float TimeElapased = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            TimeSpentSinceUpdate += TimeElapased;
+            if (TimeSpentSinceUpdate >= DisplacementUpdateInterval)
+            {
+                PerformDisplacementUpdate();
+                TimeSpentSinceUpdate = 0;
+            }
+        }
+
+        void PerformDisplacementUpdate()
+        {
+            PreviousPosition = new Vector2(Position.X, Position.Y);
+            
             ManageKeyboard();
 
-            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width,
-                                            (int)Delta.Y * (IsMoving ? MOVING : NOT_MOVING),
-                                            (int)Delta.X, (int)Delta.Y);
+            ResultingDisplacement = Position - PreviousPosition;
+
+            AnimationAccordingToMove = (IsMoving()? MOVING : NOT_MOVING);
+
         }
 
         void ManageKeyboard()
@@ -80,16 +117,7 @@ namespace XNAProject
             if (InputMgr.IsKeyboardActive)
             {
                 int horizontalDisplacement = ManageKey(Keys.D) - ManageKey(Keys.A);
-                int displacementVertical = ManageKey(Keys.S) - ManageKey(Keys.W);
-                if (horizontalDisplacement != 0 || displacementVertical != 0)
-                {
-                    IsMoving = true;
-                    AdjustPosition(horizontalDisplacement, displacementVertical);
-                }
-                else
-                {
-                    IsMoving = false;
-                }
+                AdjustPosition(horizontalDisplacement);
             }
         }
 
@@ -98,17 +126,22 @@ namespace XNAProject
             return InputMgr.IsPressed(key) ? NUM_PIXELS_MOVING : 0;
         }
 
-        void AdjustPosition(int horizontalDisplacement, int displacementVertical)
+        void AdjustPosition(int horizontalDisplacement)
         {
             float posX = ComputePosition(horizontalDisplacement, Position.X, LeftMargin, RightMargin);
-            float posY = ComputePosition(displacementVertical, Position.Y, TopMargin, BottomMargin);
-            Position = new Vector2(posX, posY);
+
+            Position = new Vector2(posX, Position.Y);
         }
 
         float ComputePosition(int displacement, float currentPosition, int MinThreshold, int MaxThreshold)
         {
             float position = currentPosition + displacement;
             return MathHelper.Min(MathHelper.Max(MinThreshold, position), MaxThreshold);
+        }
+
+        bool IsMoving()
+        {
+            return ResultingDisplacement != Vector2.Zero;
         }
 
     }
