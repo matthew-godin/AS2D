@@ -37,6 +37,9 @@ namespace XNAProject
         //int VariableToChangeName { get; set; }
         protected Vector2 Delta { get; set; }
 
+        Rectangle DestinationRectangle { get; set; }
+
+
         /// <summary>
         /// AnimatedSprite's constructor
         /// </summary>
@@ -65,7 +68,22 @@ namespace XNAProject
             TimeElapsedSinceAnimationUpdate = 0;
             //Row = 0;
 
+
+            Scale = ComputeScale();
+
+            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y,
+                (int)(Delta.X * Scale), (int)(Delta.Y * Scale));
+
+
+            
             base.Initialize();
+        }
+
+        protected override float ComputeScale()
+        {
+            float horizontalScale = DisplayZone.Width / Delta.X, verticalScale = DisplayZone.Height / Delta.Y;
+
+            return horizontalScale < verticalScale ? horizontalScale : verticalScale;
         }
 
         /// <summary>
@@ -89,6 +107,8 @@ namespace XNAProject
         public override void Update(GameTime gameTime)
         {
             //ToDestroy = IsColliding(this); LINE NOT GOOD TO CHANGE
+            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y,(int)(Delta.X * Scale), (int)(Delta.Y * Scale));
+
 
             TimeElapsedSinceAnimationUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TimeElapsedSinceAnimationUpdate >= AnimationUpdateInterval)
@@ -104,7 +124,7 @@ namespace XNAProject
         /// <param name="gameTime">Contains time information</param>
         public override void Draw(GameTime gameTime)
         {
-            SpriteMgr.Draw(Image, Position, SourceRectangle, Color.White);
+            SpriteMgr.Draw(Image, DestinationRectangle, SourceRectangle, Color.White);
         }
 
         /// <summary>
