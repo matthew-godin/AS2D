@@ -109,7 +109,6 @@ namespace XNAProject
             //ToDestroy = IsColliding(this); LINE NOT GOOD TO CHANGE
             DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y,(int)(Delta.X * Scale), (int)(Delta.Y * Scale));
 
-
             TimeElapsedSinceAnimationUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TimeElapsedSinceAnimationUpdate >= AnimationUpdateInterval)
             {
