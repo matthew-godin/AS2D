@@ -123,5 +123,14 @@ namespace XNAProject
 
             return collision;
         }
+
+        /// <summary>
+        /// Computes the margins of the AnimatedSprite
+        /// </summary>
+        protected override void ComputeMargins()
+        {
+            RightMargin = Game.Window.ClientBounds.Width - (int)Delta.X;
+            BottomMargin = Game.Window.ClientBounds.Height - (int)Delta.Y;
+        }
     }
 }

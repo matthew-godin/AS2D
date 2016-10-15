@@ -120,7 +120,7 @@ namespace XNAProject
         /// <summary>
         /// Computes the sprite's margins
         /// </summary>
-        protected void ComputeMargins()
+        protected virtual void ComputeMargins()
         {
             RightMargin = Game.Window.ClientBounds.Width - RectangleImageDimensionsScaled.Width;
             BottomMargin = Game.Window.ClientBounds.Height - RectangleImageDimensionsScaled.Height;
