@@ -65,7 +65,7 @@ namespace XNAProject
             SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
             Delta = new Vector2(Image.Width, Image.Height) / ImageDescription;
             ToDestroy = false;
-            TimeElapsedSinceAnimationUpdate = 0;
+            TimeElapsedSinceAnimationUpdate = NO_TIME_ELAPSED;
             //Row = 0;
 
 
@@ -148,8 +148,8 @@ namespace XNAProject
         /// </summary>
         protected override void ComputeMargins()
         {
-            RightMargin = Game.Window.ClientBounds.Width - (int)Delta.X;
-            BottomMargin = Game.Window.ClientBounds.Height - (int)Delta.Y;
+            RightMargin = Game.Window.ClientBounds.Width - DestinationRectangle.Width;
+            BottomMargin = Game.Window.ClientBounds.Height - DestinationRectangle.Height;
         }
     }
 }

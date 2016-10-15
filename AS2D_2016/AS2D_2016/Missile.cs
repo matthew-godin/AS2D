@@ -9,8 +9,9 @@ Role : Component inheriting from AnimatedSprite
        upwards and its explosion
 
 Created : 5 October 2016
+Modifie : 15 October 2016
 */
-/*using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -22,19 +23,19 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 
-namespace AS2D_2016
+namespace XNAProject
 {
     /// <summary>
-    /// This is a game component that implements IUpdateable.
+    /// Component inheriting from AnimatedSprite
     /// </summary>
-    public class Sphere //: AnimatedSprite
+    public class Missile : AnimatedSprite
     {
         //Property initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
-        string ImageNameMissile { get; set; }
-        Vector2 ImageDescriptionMissile { get; set; }
         string ExplosionImageName { get; set; }
         Vector2 ImageExplosionDescription { get; set; }
+        Texture2D ExplosionImage { get; set; }
+        float TimeSpentSinceDisplacementUpdate { get; set; }
 
         /// <summary>
         /// Missile constructor
@@ -46,35 +47,53 @@ namespace AS2D_2016
         /// <param name="imageDescription">Image description (Vector2)</param>
         /// <param name="animationUpdateInterval">Animation update interval (float)</param>
         /// <param name="displacementUpdateInterval">Displacement update interval (float)</param>
-        public Sphere(Game game, string imageNameMissile, Vector2 position, Rectangle displayZonee, Vector2 imageDescriptionMissile, string imageNameExplosion, Vector2 imageExplosionDescription, float animationUpdateInterval, float displacementUpdateInterval) : base(game, imageNameMissile, position, displayZonee, imageDescriptionMissile, animationUpdateInterval)
+        public Missile(Game game, string imageNameMissile, Vector2 position, Rectangle displayZonee, Vector2 imageDescriptionMissile, string imageNameExplosion, Vector2 imageExplosionDescription, float animationUpdateInterval, float displacementUpdateInterval) : base(game, imageNameMissile, position, displayZonee, imageDescriptionMissile, animationUpdateInterval)
         {
             DisplacementUpdateInterval = displacementUpdateInterval;
-            ImageNameMissile = imageNameMissile;
-            ImageDescriptionMissile = imageDescriptionMissile;
             ExplosionImageName = imageNameExplosion;
             ImageExplosionDescription = imageExplosionDescription;
         }
 
         /// <summary>
-        /// Allows the game component to perform any initialization it needs to before starting
-        /// to run.  This is where it can query for any required services and load content.
+        /// Initializes Missile components
         /// </summary>
         public override void Initialize()
         {
-            // TODO: Add your initialization code here
-
+            LoadContent();
             base.Initialize();
+            TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
         }
 
         /// <summary>
-        /// Allows the game component to update itself.
+        /// Loads the content needed by the Missile
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+            ExplosionImage = TexturesMgr.Find(ExplosionImageName);
+        }
+
+        /// <summary>
+        /// Updates the missile
+        /// </summary>
+        /// <param name="gameTime">Contains time information</param>
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
-
             base.Update(gameTime);
+            TimeSpentSinceDisplacementUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (TimeSpentSinceDisplacementUpdate >= DisplacementUpdateInterval)
+            {
+                PerformDisplacementUpdate();
+                TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
+            }
+        }
+
+        /// <summary>
+        /// Method updating the Missile displacement according to time elapsed
+        /// </summary>
+        protected virtual void PerformDisplacementUpdate()
+        {
+            Position -= Vector2.UnitY;
         }
     }
-}*/
+}

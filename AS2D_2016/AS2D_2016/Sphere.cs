@@ -9,6 +9,7 @@ Role : Component inheriting from AnimatedSprite
        the edges of the screen
 
 Created : 12 October 2016
+Modified : 15 October 2016
 */
 using System;
 using System.Collections.Generic;
@@ -61,6 +62,7 @@ namespace XNAProject
             Position = new Vector2(RandomNumberGenerator.Next(NULL_X, RightMargin), RandomNumberGenerator.Next(NULL_Y, BottomMargin / HALF_SIZE_DIVISOR));
             DisplacementAngle = RandomNumberGenerator.Next(MINIMAL_360_DEGREES_CIRCLE_FACTOR, MAXIMAL_EXCLUSIVE_360_DEGREES_CIRCLE_FACTOR) * RIGHT_ANGLE + RandomNumberGenerator.Next(STARTING_MINIMAL_DISPLACEMENT_ANGLE, STARTING_MAXIMAL_DISPLACEMENT_ANGLE);
             UpdateDisplacementUnitVector = new Vector2((float)Math.Cos(MathHelper.ToRadians(DisplacementAngle)), (float)Math.Sin(MathHelper.ToRadians(DisplacementAngle)));
+            TimeElpasedSinceDisplacementUpdate = NO_TIME_ELAPSED;
         }
 
         /// <summary>

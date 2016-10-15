@@ -31,7 +31,7 @@ namespace XNAProject
         protected Vector2 Position { get; set; }
         protected Rectangle DisplayZone { get; set; }
         protected SpriteBatch SpriteMgr { get; set; }
-        RessourcesManager<Texture2D> TexturesMgr { get; set; }
+        protected RessourcesManager<Texture2D> TexturesMgr { get; set; }
         /* probably private */ protected Texture2D Image { get; set; }
         protected float Scale { get; set; }
         //Vector2 Origin { get; set; }
