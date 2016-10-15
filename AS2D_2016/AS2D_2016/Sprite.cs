@@ -29,11 +29,11 @@ namespace XNAProject
 
         string ImageName { get; set; }
         protected Vector2 Position { get; set; }
-        Rectangle DisplayZone { get; set; }
+        protected Rectangle DisplayZone { get; set; }
         protected SpriteBatch SpriteMgr { get; set; }
         RessourcesManager<Texture2D> TexturesMgr { get; set; }
         /* probably private */ protected Texture2D Image { get; set; }
-        float Scale { get; set; }
+        protected float Scale { get; set; }
         //Vector2 Origin { get; set; }
         protected Rectangle RectangleImageDimensionsScaled { get; set; }
         protected int RightMargin { get; set; }
@@ -72,9 +72,10 @@ namespace XNAProject
         /// Computes scale by computing horizontal and vertical scale and the taking smallest
         /// </summary>
         /// <returns>The smallest of horizontal and vertical scales</returns>
-        float ComputeScale()
+        protected virtual float ComputeScale()
         {
-            float horizontalScale = DisplayZone.Width / Image.Width, verticalScale = DisplayZone.Height / Image.Height;
+            //Added float cast because otherwise it would perform an integer division always yielding 0! Anyway it's good and not good, go check AnimatedSprite.
+            float horizontalScale = DisplayZone.Width / (float)Image.Width, verticalScale = DisplayZone.Height / (float)Image.Height;
 
             return horizontalScale < verticalScale ? horizontalScale : verticalScale;
         }
