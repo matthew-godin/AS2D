@@ -47,7 +47,14 @@ namespace XNAProject
             Components.Add(new NightSkyBackground(this, "NightSky", STANDARD_INTERVAL));
             Components.Add(new AS2D(this));
             Components.Add(new FPSDisplay(this, "Arial", Color.Tomato, FPS_INTERVAL));
-            /* TEMPORARY */ Components.Add(new CenteredText(this, "Congratulations, you have reached level " + "4", "Arial", new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.Red, 0.2f));
+            ///* TEMPORARY */ Components.Add(new CenteredText(this, "Congratulations, you have reached level " + "4", "Arial", new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.Red, 0.2f));
+            /*Temporaire*/              Components.Add(new Spaceship(this,
+            /*Temporaire*/                                                 "Spaceship",
+            /*Temporaire*/                                                  new Vector2(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 4 * 3),
+            /*Temporaire*/                                                 new Rectangle(0, 0, Window.ClientBounds.Width / 5, Window.ClientBounds.Height / 5),
+            /*Temporaire*/                                                  new Vector2(4, 2),
+            /*Temporaire*/                                                  6 * STANDARD_INTERVAL,
+            /*Temporaire*/                                                  STANDARD_INTERVAL));
             base.Initialize();
         }
 
