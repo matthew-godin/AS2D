@@ -37,7 +37,7 @@ namespace XNAProject
         //int VariableToChangeName { get; set; }
         protected Vector2 Delta { get; set; }
 
-        protected Rectangle DestinationRectangle { get; set; }
+        public Rectangle DestinationRectangle { get; set; }
 
 
         /// <summary>
@@ -133,14 +133,18 @@ namespace XNAProject
         /// <returns></returns>
         public override bool IsColliding(object otherObject)
         {
-            AnimatedSprite otherSprite = (AnimatedSprite)otherObject;
-            Rectangle rectangleCollision = Rectangle.Intersect(RectangleImageDimensionsÀLScale, otherSprite.RectangleImageDimensionsÀLScale);
-            bool collision = rectangleCollision.Width == NULL_WIDTH && rectangleCollision.Height == NULL_HEIGHT;
+            //AnimatedSprite otherSprite = (AnimatedSprite)otherObject;
+            //Rectangle rectangleCollision = Rectangle.Intersect(RectangleImageDimensionsÀLScale, otherSprite.RectangleImageDimensionsÀLScale);
+            //bool collision = rectangleCollision.Width == NULL_WIDTH && rectangleCollision.Height == NULL_HEIGHT;
 
-            ToDestroy = collision;
-            otherSprite.ToDestroy = collision;
+            //ToDestroy = collision;
+            //otherSprite.ToDestroy = collision;
 
-            return collision;
+            //return collision;
+
+            Rectangle otherRectangle = ((AnimatedSprite)otherObject).DestinationRectangle;
+
+            return DestinationRectangle.Intersects(otherRectangle);
         }
 
         /// <summary>
