@@ -37,6 +37,8 @@ namespace XNAProject
         Texture2D ExplosionImage { get; set; }
         float TimeSpentSinceDisplacementUpdate { get; set; }
 
+        public bool ExplosionActivated { get; set; }
+
         /// <summary>
         /// Missile constructor
         /// </summary>
@@ -94,6 +96,11 @@ namespace XNAProject
         protected virtual void PerformDisplacementUpdate()
         {
             Position -= Vector2.UnitY;
+        }
+
+        public void ActivateExplosion()
+        {
+
         }
     }
 }
