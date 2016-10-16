@@ -43,7 +43,6 @@ namespace XNAProject
         AnimatedSprite Explosion { get; set; }
         //bool ExplosionDone { get; set; }
 
-        public bool ExplosionActivated { get; set; }
 
         /// <summary>
         /// Missile constructor
@@ -159,12 +158,6 @@ namespace XNAProject
                     //ExplosionDone = true;
                 }
             }
-
-        }
-
-        public void ActivateExplosion()
-        {
-
         }
     }
 }
