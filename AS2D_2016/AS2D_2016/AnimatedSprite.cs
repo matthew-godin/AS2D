@@ -37,7 +37,7 @@ namespace XNAProject
         //int VariableToChangeName { get; set; }
         protected Vector2 Delta { get; set; }
 
-        Rectangle DestinationRectangle { get; set; }
+        protected Rectangle DestinationRectangle { get; set; }
 
 
         /// <summary>

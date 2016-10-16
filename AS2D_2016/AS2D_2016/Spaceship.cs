@@ -89,6 +89,10 @@ namespace XNAProject
         {
             base.Update(gameTime);
 
+            //Added for missile
+            if (InputMgr.IsNewKey(Keys.Space))
+                LaunchMissile();
+
             float TimeElapased = (float)gameTime.ElapsedGameTime.TotalSeconds;
             TimeSpentSinceUpdate += TimeElapased;
             if (TimeSpentSinceUpdate >= DisplacementUpdateInterval)
@@ -107,7 +111,6 @@ namespace XNAProject
             ResultingDisplacement = Position - PreviousPosition;
 
             AnimationAccordingToMove = (IsMoving()? MOVING : NOT_MOVING);
-
         }
 
         void ManageKeyboard()
@@ -149,5 +152,23 @@ namespace XNAProject
         //    SpriteMgr.Draw(Image, new Rectangle((int)Position.X, (int)Position.Y, (int)(Delta.X*Scale), (int)(Delta.Y*Scale)),
         //                        SourceRectangle, Color.White);
         //}
+
+        void LaunchMissile()
+        {
+            int numMissiles = (Game.Components.Where(component => component is Missile && !((Missile)component).ToDestroy)).ToList().Count();
+
+            if(numMissiles < 3)
+            {
+                Game.Components.Add(new Missile(Game,
+                                                "Missile",
+                                                new Vector2(DestinationRectangle.X + DestinationRectangle.Width/2 - 4, DestinationRectangle.Y - DestinationRectangle.Height/4),
+                                                new Rectangle(0, 0, 30, 40),
+                                                new Vector2(25, 1),
+                                                "Explosion",
+                                                new Vector2(5, 4),
+                                                1.5f * GameProject.STANDARD_INTERVAL,
+                                                GameProject.STANDARD_INTERVAL));
+            }
+        }
     }
 }
