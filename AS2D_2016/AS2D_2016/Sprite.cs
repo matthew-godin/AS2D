@@ -28,7 +28,7 @@ namespace XNAProject
         protected const int NULL_Y = 0, NULL_X = 0, NULL_HEIGHT = 0, NULL_WIDTH = 0, HALF_SIZE_DIVISOR = 2;
 
         string ImageName { get; set; }
-        protected Vector2 Position { get; set; }
+        public Vector2 Position { get; protected set; }
         protected Rectangle DisplayZone { get; set; }
         protected SpriteBatch SpriteMgr { get; set; }
         protected RessourcesManager<Texture2D> TexturesMgr { get; set; }
