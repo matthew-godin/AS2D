@@ -41,6 +41,7 @@ namespace XNAProject
         float TimeSpentSinceUpdateExplosion { get; set; }
         int ExplosionPhase { get; set; }
         AnimatedSprite Explosion { get; set; }
+        //bool ExplosionDone { get; set; }
 
         /// <summary>
         /// Missile constructor
@@ -67,6 +68,8 @@ namespace XNAProject
             LoadContent();
             base.Initialize();
             TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
+            ExplosionActivated = false;
+            //ExplosionDone = false;
         }
 
         /// <summary>
@@ -99,20 +102,27 @@ namespace XNAProject
         protected virtual void PerformDisplacementUpdate(GameTime gameTime)
         {
             Position -= Vector2.UnitY;
-            if (Position.Y <= TopMargin && !ExplosionActivated)
+            if (Position.Y <= TopMargin && !ExplosionActivated /*&& !ExplosionDone*/)
             {
                 ActivateExplosionMissile();
-            }
-            if (ExplosionActivated)
-            {
                 ManageExplosion(gameTime);
             }
+            /*if (ExplosionDone)
+            {
+                for (int i = Game.Components.Count - 1; i >= 0; --i)
+                {
+                    if (Game.Components[i] is IDestructible && ((IDestructible)Game.Components[i]).ToDestroy)
+                    {
+                        Game.Components.RemoveAt(i);
+                    }
+                }
+            }*/
         }
 
         /// <summary>
         /// Called when missile must explode
         /// </summary>
-        void ActivateExplosion()
+        public void ActivateExplosion()
         {
             
         }
@@ -143,7 +153,8 @@ namespace XNAProject
                 if (ExplosionPhase >= ImageExplosionDescription.X * ImageExplosionDescription.Y)
                 {
                     ExplosionActivated = false;
-                    Game.Components.Remove(Explosion);
+                    Explosion.ToDestroy = true;
+                    //ExplosionDone = true;
                 }
             }
 
