@@ -109,13 +109,19 @@ namespace XNAProject
         /// <returns></returns>
         public virtual bool IsColliding(object otherObject)
         {
-            AnimatedSprite otherSprite = (AnimatedSprite)otherObject;
-            Rectangle rectangleCollision = Rectangle.Intersect(RectangleImageDimensionsScaled, otherSprite.RectangleImageDimensionsScaled);
-            bool collision = rectangleCollision.Width == NULL_WIDTH && rectangleCollision.Height == NULL_HEIGHT;
+            //AnimatedSprite otherSprite = (AnimatedSprite)otherObject;
+            //Rectangle rectangleCollision = Rectangle.Intersect(RectangleImageDimensionsScaled, otherSprite.RectangleImageDimensionsScaled);
+            //bool collision = rectangleCollision.Width == NULL_WIDTH && rectangleCollision.Height == NULL_HEIGHT;
 
-            otherSprite.ToDestroy = collision;
+            //otherSprite.ToDestroy = collision;
+            //return collision;
 
-            return collision;
+            //Rectangle otherRectangle = ((AnimatedSprite)otherObject).DestinationRectangle;
+
+            //return DisplayZone.Intersects(otherRectangle);
+
+            return true;
+
         }
 
         /// <summary>
