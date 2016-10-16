@@ -27,7 +27,7 @@ namespace XNAProject
 
         //fireball
         Vector2 ImageDescription { get; set; }
-        float AnimationUpdateInterval { get; set; }
+        protected float AnimationUpdateInterval { get; set; }
 
         //Properties initially managed by Initialze
         protected Rectangle SourceRectangle { get; set; }
