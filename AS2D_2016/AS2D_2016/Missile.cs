@@ -30,12 +30,18 @@ namespace XNAProject
     /// </summary>
     public class Missile : AnimatedSprite
     {
+        const float SLOW_ANIMATION_INTERVAL = 6 * GameProject.STANDARD_INTERVAL;
         //Property initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
         string ExplosionImageName { get; set; }
         Vector2 ImageExplosionDescription { get; set; }
         Texture2D ExplosionImage { get; set; }
         float TimeSpentSinceDisplacementUpdate { get; set; }
+        public bool ExplosionActivated { get; private set; }
+        float TimeSpentSinceUpdateExplosion { get; set; }
+        int ExplosionPhase { get; set; }
+        AnimatedSprite Explosion { get; set; }
+        //bool ExplosionDone { get; set; }
 
         public bool ExplosionActivated { get; set; }
 
@@ -64,6 +70,8 @@ namespace XNAProject
             LoadContent();
             base.Initialize();
             TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
+            ExplosionActivated = false;
+            //ExplosionDone = false;
         }
 
         /// <summary>
@@ -85,7 +93,7 @@ namespace XNAProject
             TimeSpentSinceDisplacementUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TimeSpentSinceDisplacementUpdate >= DisplacementUpdateInterval)
             {
-                PerformDisplacementUpdate();
+                PerformDisplacementUpdate(gameTime);
                 TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
             }
         }
@@ -93,9 +101,65 @@ namespace XNAProject
         /// <summary>
         /// Method updating the Missile displacement according to time elapsed
         /// </summary>
-        protected virtual void PerformDisplacementUpdate()
+        protected virtual void PerformDisplacementUpdate(GameTime gameTime)
         {
             Position -= Vector2.UnitY;
+            if (Position.Y <= TopMargin && !ExplosionActivated /*&& !ExplosionDone*/)
+            {
+                ActivateExplosionMissile();
+                ManageExplosion(gameTime);
+            }
+            /*if (ExplosionDone)
+            {
+                for (int i = Game.Components.Count - 1; i >= 0; --i)
+                {
+                    if (Game.Components[i] is IDestructible && ((IDestructible)Game.Components[i]).ToDestroy)
+                    {
+                        Game.Components.RemoveAt(i);
+                    }
+                }
+            }*/
+        }
+
+        /// <summary>
+        /// Called when missile must explode
+        /// </summary>
+        public void ActivateExplosion()
+        {
+            
+        }
+
+        /// <summary>
+        /// Activates the Missile's explosion
+        /// </summary>
+        void ActivateExplosionMissile()
+        {
+            Explosion = new AnimatedSprite(Game, "Explosion", Position, DisplayZone, ImageExplosionDescription, SLOW_ANIMATION_INTERVAL);
+            Game.Components.Add(Explosion);
+            ExplosionActivated = true;
+            TimeSpentSinceUpdateExplosion = NO_TIME_ELAPSED;
+        }
+
+        /// <summary>
+        /// Manages the explosion of the missile
+        /// </summary>
+        /// <param name="gameTime">Contains time information</param>
+        private void ManageExplosion(GameTime gameTime)
+        {
+            float TimeElapased = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            TimeSpentSinceUpdateExplosion += TimeElapased;
+            if (TimeSpentSinceUpdateExplosion >= SLOW_ANIMATION_INTERVAL)
+            {
+                ++ExplosionPhase;
+                TimeSpentSinceUpdateExplosion = NO_TIME_ELAPSED;
+                if (ExplosionPhase >= ImageExplosionDescription.X * ImageExplosionDescription.Y)
+                {
+                    ExplosionActivated = false;
+                    Explosion.ToDestroy = true;
+                    //ExplosionDone = true;
+                }
+            }
+
         }
 
         public void ActivateExplosion()
