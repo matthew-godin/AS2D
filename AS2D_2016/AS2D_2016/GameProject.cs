@@ -51,7 +51,7 @@ namespace XNAProject
             /*Temporaire*/              Components.Add(new Spaceship(this,
             /*Temporaire*/                                                 "Spaceship",
             /*Temporaire*/                                                  new Vector2(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 4 * 3),
-            /*Temporaire*/                                                 new Rectangle(0, 0, Window.ClientBounds.Width / 5, Window.ClientBounds.Height / 5),
+            /*Temporaire*/                                                  new Rectangle(0, 0, Window.ClientBounds.Width / 5, Window.ClientBounds.Height / 5),
             /*Temporaire*/                                                  new Vector2(4, 2),
             /*Temporaire*/                                                  6 * STANDARD_INTERVAL,
             /*Temporaire*/                                                  STANDARD_INTERVAL));

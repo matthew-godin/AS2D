@@ -148,8 +148,8 @@ namespace XNAProject
         /// </summary>
         protected override void ComputeMargins()
         {
-            RightMargin = Game.Window.ClientBounds.Width - (int)Delta.X;
-            BottomMargin = Game.Window.ClientBounds.Height - (int)Delta.Y;
+            RightMargin = Game.Window.ClientBounds.Width - DestinationRectangle.Width;
+            BottomMargin = Game.Window.ClientBounds.Height - DestinationRectangle.Height;
         }
     }
 }

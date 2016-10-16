@@ -10,7 +10,7 @@ Role : Component inheriting from AnimatedSprite
 
 Created : 5 October 2016
 */
-/*using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -77,4 +77,4 @@ namespace AS2D_2016
             base.Update(gameTime);
         }
     }
-}*/
+}

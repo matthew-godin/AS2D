@@ -107,7 +107,6 @@ namespace XNAProject
             ResultingDisplacement = Position - PreviousPosition;
 
             AnimationAccordingToMove = (IsMoving()? MOVING : NOT_MOVING);
-
         }
 
         void ManageKeyboard()
