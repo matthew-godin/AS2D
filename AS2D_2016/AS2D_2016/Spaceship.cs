@@ -34,6 +34,7 @@ namespace XNAProject
         float TimeSpentSinceUpdate { get; set; }
         int AnimationAccordingToMove { get; set; }
         Vector2 PreviousPosition { get; set; }
+        List<Missile> Missiles { get; set; }
 
         //Property initially managed by LoadContent
         InputManager InputMgr { get; set; }
@@ -65,6 +66,8 @@ namespace XNAProject
         public override void Initialize()
         {
             base.Initialize();
+
+            Missiles = new List<Missile>();
 
             TimeSpentSinceUpdate = 0;
             AnimationAccordingToMove = 0;
@@ -111,6 +114,9 @@ namespace XNAProject
             ResultingDisplacement = Position - PreviousPosition;
 
             AnimationAccordingToMove = (IsMoving()? MOVING : NOT_MOVING);
+
+            EnleverMissiles();
+
         }
 
         void ManageKeyboard()
@@ -159,7 +165,7 @@ namespace XNAProject
 
             if(numMissiles < 3)
             {
-                Game.Components.Add(new Missile(Game,
+                Missile missile = new Missile(Game,
                                                 "Missile",
                                                 new Vector2(DestinationRectangle.X + DestinationRectangle.Width/2 - 4, DestinationRectangle.Y - DestinationRectangle.Height/4),
                                                 new Rectangle(0, 0, 30, 40),
@@ -167,7 +173,20 @@ namespace XNAProject
                                                 "Explosion",
                                                 new Vector2(5, 4),
                                                 1.5f * GameProject.STANDARD_INTERVAL,
-                                                GameProject.STANDARD_INTERVAL));
+                                                GameProject.STANDARD_INTERVAL);
+                Game.Components.Add(missile);
+                Missiles.Add(missile);
+            }
+        }
+
+        void EnleverMissiles()
+        {
+            foreach(Missile missile in Missiles)
+            {
+                if (missile.ToDestroy)
+                {
+                    Game.Components.Remove(missile);
+                }
             }
         }
     }
