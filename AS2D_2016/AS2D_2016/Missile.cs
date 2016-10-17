@@ -125,7 +125,7 @@ namespace XNAProject
         /// </summary>
         public void ActivateExplosion()
         {
-            
+            ToDestroy = true;//ESSENTIAL LINE!!!
         }
 
         /// <summary>
