@@ -34,7 +34,6 @@ namespace XNAProject
         float TimeSpentSinceUpdate { get; set; }
         int AnimationAccordingToMove { get; set; }
         Vector2 PreviousPosition { get; set; }
-        List<Missile> Missiles { get; set; }
 
         //Property initially managed by LoadContent
         InputManager InputMgr { get; set; }
@@ -67,7 +66,6 @@ namespace XNAProject
         {
             base.Initialize();
 
-            Missiles = new List<Missile>();
             Position = new Vector2(Position.X - DestinationRectangle.Width/2,
                                    Game.Window.ClientBounds.Height - DestinationRectangle.Height);
             TimeSpentSinceUpdate = 0;
@@ -118,7 +116,6 @@ namespace XNAProject
 
             AnimationAccordingToMove = (IsMoving()? MOVING : NOT_MOVING);
 
-            EnleverMissiles();
 
         }
 
@@ -178,19 +175,8 @@ namespace XNAProject
                                                 1.5f * GameProject.STANDARD_INTERVAL,
                                                 GameProject.STANDARD_INTERVAL);
                 Game.Components.Add(missile);
-                Missiles.Add(missile);
             }
         }
 
-        void EnleverMissiles()
-        {
-            foreach(Missile missile in Missiles)
-            {
-                if (missile.ToDestroy)
-                {
-                    Game.Components.Remove(missile);
-                }
-            }
-        }
     }
 }
