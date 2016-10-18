@@ -161,7 +161,7 @@ namespace XNAProject
 
         void LaunchMissile()
         {
-            int numMissiles = (Game.Components.Where(component => component is Missile && !((Missile)component).ToDestroy)).ToList().Count();
+            int numMissiles = (Game.Components.Where(component => component is Missile && !((Missile)component).ToDestroy && ((Missile)component).Visible).Count());
 
             if(numMissiles < 3)
             {
