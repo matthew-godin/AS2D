@@ -30,7 +30,7 @@ namespace XNAProject
     /// </summary>
     public class Missile : AnimatedSprite
     {
-        const float SLOW_ANIMATION_INTERVAL = 6 * GameProject.STANDARD_INTERVAL;
+        const float SLOW_ANIMATION_INTERVAL = 6 * GameProject.STANDARD_INTERVAL, ImageName = 0.00015F, Y_DISPLACEMENT_UPDATE = 4.0F;
         //Property initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
         string ExplosionImageName { get; set; }
@@ -41,6 +41,7 @@ namespace XNAProject
         float TimeSpentSinceUpdateExplosion { get; set; }
         int ExplosionPhase { get; set; }
         AnimatedSprite Explosion { get; set; }
+        Vector2 DisplacementUpdateVector { get; set; }
         //bool ExplosionDone { get; set; }
 
 
@@ -71,6 +72,7 @@ namespace XNAProject
             TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
             ExplosionActivated = false;
             //ExplosionDone = false;
+            DisplacementUpdateVector = new Vector2(NULL_X, Y_DISPLACEMENT_UPDATE);
         }
 
         /// <summary>
@@ -102,11 +104,13 @@ namespace XNAProject
         /// </summary>
         protected virtual void PerformDisplacementUpdate(GameTime gameTime)
         {
-            Position -= Vector2.UnitY;
+            Position -= DisplacementUpdateVector;
+            DisplacementUpdateInterval -= ImageName;
             if (Position.Y <= TopMargin && !ExplosionActivated /*&& !ExplosionDone*/)
             {
                 ActivateExplosionMissile();
                 ManageExplosion(gameTime);
+                ToDestroy = true;
             }
             /*if (ExplosionDone)
             {
