@@ -68,10 +68,13 @@ namespace XNAProject
             base.Initialize();
 
             Missiles = new List<Missile>();
-
+            Position = new Vector2(Position.X - DestinationRectangle.Width/2,
+                                   Game.Window.ClientBounds.Height - DestinationRectangle.Height);
             TimeSpentSinceUpdate = 0;
             AnimationAccordingToMove = 0;
             PreviousPosition = new Vector2(Position.X, Position.Y);
+
+            
         }
 
         protected override void LoadContent()
