@@ -2,7 +2,7 @@
 AnimatedSprite.cs
 --------------
 
-By Matthew Godin
+By Matthew Godin and Raphael Brule
 
 Role : Component inheriting from Sprite and 
        animates the sprite that will
