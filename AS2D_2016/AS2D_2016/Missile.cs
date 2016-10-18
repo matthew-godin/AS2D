@@ -31,7 +31,7 @@ namespace XNAProject
     public class Missile : AnimatedSprite
     {
         const float SLOW_ANIMATION_INTERVAL = 6 * GameProject.STANDARD_INTERVAL, ImageName = 0.00015F, Y_DISPLACEMENT_UPDATE = 4.0F;
-        const int BEFORE_EXPLOSION_FIRST_PHASE = 0;
+        const int BEFORE_EXPLOSION_FIRST_PHASE = 0, EXPLOSION_DIMENSIONS = 40;
         //Property initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
         string ExplosionImageName { get; set; }
@@ -43,7 +43,8 @@ namespace XNAProject
         int ExplosionPhase { get; set; }
         public AnimatedSprite Explosion { get; private set; }
         Vector2 DisplacementUpdateVector { get; set; }
-
+        bool Collision { get; set; }
+        Rectangle ExplosionZone { get; set; }
 
         /// <summary>
         /// Missile constructor
@@ -73,6 +74,8 @@ namespace XNAProject
             ExplosionActivated = false;
             //ExplosionDone = false;
             DisplacementUpdateVector = new Vector2(NULL_X, Y_DISPLACEMENT_UPDATE);
+            Collision = false;
+            ExplosionZone = new Rectangle(NULL_X, NULL_Y, EXPLOSION_DIMENSIONS, EXPLOSION_DIMENSIONS);
         }
 
         /// <summary>
@@ -101,6 +104,11 @@ namespace XNAProject
             {
                 ManageExplosion(gameTime);
             }
+            if (Collision)
+            {
+                Collision = false;
+                Game.Components.Add(Explosion);
+            }
         }
 
         /// <summary>
@@ -112,8 +120,7 @@ namespace XNAProject
             DisplacementUpdateInterval -= ImageName;
             if (Position.Y <= TopMargin && !ExplosionActivated)
             {
-                Visible = false;
-                ActivateExplosionMissile();
+                ActivateExplosion();
                 //ManageExplosion(gameTime);
                 //ToDestroy = true;
             }
@@ -125,19 +132,12 @@ namespace XNAProject
         public void ActivateExplosion()
         {
             //ToDestroy = true;//ESSENTIAL LINE!!!
-
-        }
-
-        /// <summary>
-        /// Activates the Missile's explosion
-        /// </summary>
-        void ActivateExplosionMissile()
-        {
-            Explosion = new AnimatedSprite(Game, "Explosion", Position, DisplayZone, ImageExplosionDescription, SLOW_ANIMATION_INTERVAL);
-            Game.Components.Add(Explosion);
+            Visible = false;
+            Explosion = new AnimatedSprite(Game, "Explosion", Position, ExplosionZone, ImageExplosionDescription, SLOW_ANIMATION_INTERVAL);
             ExplosionActivated = true;
             TimeSpentSinceUpdateExplosion = NO_TIME_ELAPSED;
             ExplosionPhase = BEFORE_EXPLOSION_FIRST_PHASE;
+            Collision = true;
         }
 
         /// <summary>
