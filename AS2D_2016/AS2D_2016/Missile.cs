@@ -40,7 +40,7 @@ namespace XNAProject
         public bool ExplosionActivated { get; private set; }
         float TimeSpentSinceUpdateExplosion { get; set; }
         int ExplosionPhase { get; set; }
-        AnimatedSprite Explosion { get; set; }
+        public AnimatedSprite Explosion { get; private set; }
         Vector2 DisplacementUpdateVector { get; set; }
         //bool ExplosionDone { get; set; }
 
@@ -97,6 +97,10 @@ namespace XNAProject
                 PerformDisplacementUpdate(gameTime);
                 TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
             }
+            if (ExplosionActivated)
+            {
+                ManageExplosion(gameTime);
+            }
         }
 
         /// <summary>
@@ -109,7 +113,7 @@ namespace XNAProject
             if (Position.Y <= TopMargin && !ExplosionActivated /*&& !ExplosionDone*/)
             {
                 ActivateExplosionMissile();
-                ManageExplosion(gameTime);
+                //ManageExplosion(gameTime);
                 ToDestroy = true;
             }
             /*if (ExplosionDone)
@@ -130,6 +134,7 @@ namespace XNAProject
         public void ActivateExplosion()
         {
             ToDestroy = true;//ESSENTIAL LINE!!!
+
         }
 
         /// <summary>
