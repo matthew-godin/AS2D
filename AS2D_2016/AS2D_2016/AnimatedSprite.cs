@@ -23,21 +23,18 @@ namespace XNAProject
     public class AnimatedSprite : Sprite, IDestructible
     {
         //Constants
-        protected const int NO_TIME_ELAPSED = 0, NO_DISPLACEMENT = 0, ORIGIN = 0;
+        protected const int NO_TIME_ELAPSED = 0, NO_DISPLACEMENT = 0;
 
         //fireball
         Vector2 ImageDescription { get; set; }
         protected float AnimationUpdateInterval { get; set; }
 
         //Properties initially managed by Initialze
-        protected Rectangle SourceRectangle { get; set; }
         public bool ToDestroy { get; set; }
         float TimeElapsedSinceAnimationUpdate { get; set; }
         //int Row { get; set; }
         //int VariableToChangeName { get; set; }
-        protected Vector2 Delta { get; set; }
 
-        public Rectangle DestinationRectangle { get; set; }
 
 
         /// <summary>
@@ -61,9 +58,9 @@ namespace XNAProject
         /// </summary>
         public override void Initialize()
         {
+            base.Initialize();
             LoadContent();
-            SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
-            Delta = new Vector2(Image.Width, Image.Height) / ImageDescription;
+            ImageDimensionsOnDisplay = new Vector2(Image.Width, Image.Height) / ImageDescription;
             ToDestroy = false;
             TimeElapsedSinceAnimationUpdate = NO_TIME_ELAPSED;
             //Row = 0;
@@ -71,17 +68,31 @@ namespace XNAProject
 
             Scale = ComputeScale();
 
-            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y,
-                (int)(Delta.X * Scale), (int)(Delta.Y * Scale));
-
-
             
-            base.Initialize();
+            
+        }
+
+        /// <summary>
+        /// Create rsource rectangle
+        /// </summary>
+        /// <returns>Returns the rectangle</returns>
+        protected override Rectangle CreateSourceRectangle()
+        {
+            return new Rectangle(ORIGIN, ORIGIN, (int)ImageDimensionsOnDisplay.X, (int)ImageDimensionsOnDisplay.Y);
+        }
+
+        /// <summary>
+        /// Céer le rectangle des bonnes dimmensions à l'échelle et position d'affichage
+        /// </summary>
+        /// <returns>Returns the rectangle</returns>
+        protected override Rectangle CreateRectangleImageDimensionsScaled()
+        {
+            return new Rectangle((int)Position.X, (int)Position.Y, (int)(ImageDimensionsOnDisplay.X * Scale), (int)(ImageDimensionsOnDisplay.Y * Scale));
         }
 
         protected override float ComputeScale()
         {
-            float horizontalScale = DisplayZone.Width / Delta.X, verticalScale = DisplayZone.Height / Delta.Y;
+            float horizontalScale = DisplayZone.Width / ImageDimensionsOnDisplay.X, verticalScale = DisplayZone.Height / ImageDimensionsOnDisplay.Y;
 
             return horizontalScale < verticalScale ? horizontalScale : verticalScale;
         }
@@ -101,13 +112,13 @@ namespace XNAProject
 
             //if(VariableToChangeName == ImageDescription.X - 1)
             //    ++Row;
-            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width, SourceRectangle.X >= Image.Width - (int)Delta.X ? (SourceRectangle.Y >= Image.Height - (int)Delta.Y ? ORIGIN : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
+            SourceRectangle = new Rectangle((SourceRectangle.X + (int)ImageDimensionsOnDisplay.X) % Image.Width, SourceRectangle.X >= Image.Width - (int)ImageDimensionsOnDisplay.X ? (SourceRectangle.Y >= Image.Height - (int)ImageDimensionsOnDisplay.Y ? ORIGIN : SourceRectangle.Y + (int)ImageDimensionsOnDisplay.Y) : SourceRectangle.Y, (int)ImageDimensionsOnDisplay.X, (int)ImageDimensionsOnDisplay.Y);
         }
 
         public override void Update(GameTime gameTime)
         {
             //ToDestroy = IsColliding(this); LINE NOT GOOD TO CHANGE
-            DestinationRectangle = new Rectangle((int)Position.X, (int)Position.Y,(int)(Delta.X * Scale), (int)(Delta.Y * Scale));
+            CreateRectangleImageDimensionsScaled();
 
             TimeElapsedSinceAnimationUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TimeElapsedSinceAnimationUpdate >= AnimationUpdateInterval)
@@ -117,14 +128,6 @@ namespace XNAProject
             }
         }
 
-        /// <summary>
-        /// Draws the AnimatedSprite
-        /// </summary>
-        /// <param name="gameTime">Contains time information</param>
-        public override void Draw(GameTime gameTime)
-        {
-            SpriteMgr.Draw(Image, DestinationRectangle, SourceRectangle, Color.White);
-        }
 
         /// <summary>
         /// Predicate true if the Sprite is in collision with another object
@@ -142,9 +145,9 @@ namespace XNAProject
 
             //return collision;
 
-            Rectangle otherRectangle = ((AnimatedSprite)otherObject).DestinationRectangle;
+            Rectangle otherRectangle = ((AnimatedSprite)otherObject).RectangleImageDimensionsÀLScale;
 
-            return DestinationRectangle.Intersects(otherRectangle);
+            return RectangleImageDimensionsÀLScale.Intersects(otherRectangle);
         }
 
         /// <summary>
@@ -152,8 +155,8 @@ namespace XNAProject
         /// </summary>
         protected override void ComputeMargins()
         {
-            RightMargin = Game.Window.ClientBounds.Width - DestinationRectangle.Width;
-            BottomMargin = Game.Window.ClientBounds.Height - DestinationRectangle.Height;
+            RightMargin = Game.Window.ClientBounds.Width - RectangleImageDimensionsÀLScale.Width;
+            BottomMargin = Game.Window.ClientBounds.Height - RectangleImageDimensionsÀLScale.Height;
         }
     }
 }

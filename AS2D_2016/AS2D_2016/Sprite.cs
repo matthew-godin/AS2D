@@ -11,6 +11,8 @@ Role : DrawableGameComponent
 Created : 5 October 2016
 Modified : 12 October 2016
 Description : Now shows scaled and IsColliding is implemented
+
+Co-author : Raphael Brule
 */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,13 +25,15 @@ namespace XNAProject
     /// </summary>
     public class Sprite : Microsoft.Xna.Framework.DrawableGameComponent, ICollidable
     {
-        //const float NO_DEPTH_LAYER = 0.0F;
-        //const float NO_ROTATION = 0.0F;
-        protected const int NULL_Y = 0, NULL_X = 0, NULL_HEIGHT = 0, NULL_WIDTH = 0, HALF_SIZE_DIVISOR = 2;
+        protected const int NULL_Y = 0, NULL_X = 0, NULL_HEIGHT = 0, NULL_WIDTH = 0, HALF_SIZE_DIVISOR = 2, ORIGIN = 0;
 
+        //Properties initially managed by the constructor
         string ImageName { get; set; }
-        public Vector2 Position { get; protected set; }
+        public Vector2 Position { get; private set; }
         protected Rectangle DisplayZone { get; set; }
+
+        protected Rectangle SourceRectangle { get; set; }
+        protected Vector2 ImageDimensionsOnDisplay { get; set; }
         protected SpriteBatch SpriteMgr { get; set; }
         protected RessourcesManager<Texture2D> TexturesMgr { get; set; }
         /* probably private */ protected Texture2D Image { get; set; }
@@ -61,11 +65,31 @@ namespace XNAProject
         public override void Initialize()
         {
             base.Initialize();
+            ImageDimensionsOnDisplay = new Vector2(Image.Width, Image.Height);
+            SourceRectangle = CreateSourceRectangle();
             Scale = ComputeScale();
             //Origin = new Vector2(NULL_X, NULL_Y);
-            RectangleImageDimensionsScaled = new Rectangle((int)Position.X, (int)Position.Y, (int)(Image.Width * Scale), (int)(Image.Height * Scale));
+            RectangleImageDimensionsScaled = CreateRectangleImageDimensionsScaled();
             TopMargin = NULL_HEIGHT;
             LeftMargin = NULL_WIDTH;
+        }
+
+        /// <summary>
+        /// Create source rectangle
+        /// </summary>
+        /// <returns>Returns the rectangle</returns>
+        protected virtual Rectangle CreateSourceRectangle()
+        {
+            return new Rectangle(ORIGIN, ORIGIN, (int)ImageDimensionsOnDisplay.X, (int)ImageDimensionsOnDisplay.Y);
+        }
+
+        /// <summary>
+        /// Create the scaled rectangle with right dimensions and display position
+        /// </summary>
+        /// <returns>Returns the rectangle</returns>
+        protected virtual Rectangle CreateRectangleImageDimensionsScaled()
+        {
+            return new Rectangle((int)Position.X, (int)Position.Y, (int)(ImageDimensionsOnDisplay.X * Scale), (int)(ImageDimensionsOnDisplay.Y * Scale));
         }
 
         /// <summary>
@@ -92,14 +116,12 @@ namespace XNAProject
         }
 
         /// <summary>
-        /// Method drawing sprite on the screen
+        /// Method drawing the AnimatedSprite on the screen
         /// </summary>
         /// <param name="gameTime">Contains time information</param>
         public override void Draw(GameTime gameTime)
         {
-            //SpriteMgr.Draw(Image, Position, DisplayZone, Color.White, NO_ROTATION, Origin, Scale, SpriteEffects.None, NO_DEPTH_LAYER);
-
-            SpriteMgr.Draw(Image, RectangleImageDimensionsScaled, Color.White);
+            SpriteMgr.Draw(Image, RectangleImageDimensionsScaled, SourceRectangle, Color.White);
         }
 
         /// <summary>
@@ -132,5 +154,7 @@ namespace XNAProject
             RightMargin = Game.Window.ClientBounds.Width - RectangleImageDimensionsScaled.Width;
             BottomMargin = Game.Window.ClientBounds.Height - RectangleImageDimensionsScaled.Height;
         }
+
+
     }
 }

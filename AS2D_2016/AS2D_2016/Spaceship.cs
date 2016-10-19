@@ -73,11 +73,11 @@ namespace XNAProject
             base.Initialize();
 
             //To erase with the descent of the ship now : Position = new Vector2(Position.X - DestinationRectangle.Width/2, Game.Window.ClientBounds.Height - DestinationRectangle.Height); 
-            Position = new Vector2(Position.X - DestinationRectangle.Width / HALF_SIZE_DIVISOR, Position.Y - DestinationRectangle.Height / HALF_SIZE_DIVISOR); // Nouvelle ligne
+            Position = new Vector2(Position.X - RectangleImageDimensionsScaled.Width / HALF_SIZE_DIVISOR, Position.Y - RectangleImageDimensionsScaled.Height / HALF_SIZE_DIVISOR); // Nouvelle ligne
             TimeSpentSinceUpdate = 0;
             AnimationAccordingToMove = 0;
             PreviousPosition = new Vector2(Position.X, Position.Y);
-            ShipFinalY = Game.Window.ClientBounds.Height - DestinationRectangle.Height; // Nouvelle ligne
+            ShipFinalY = Game.Window.ClientBounds.Height - RectangleImageDimensionsScaled.Height; // Nouvelle ligne
             IsDescending = true; // Nouvelle ligne
             DescentDisplacementVector = new Vector2(NO_DISPLACEMENT, NUM_PIXELS_MOVING);
         }
@@ -91,9 +91,9 @@ namespace XNAProject
 
         protected override void PerformAnimationUpdate()
         {
-            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width,
-                             (int)Delta.Y *AnimationAccordingToMove,
-                             (int)Delta.X, (int)Delta.Y);
+            SourceRectangle = new Rectangle((SourceRectangle.X + (int)ImageDimensionsOnDisplay.X) % Image.Width,
+                             (int)ImageDimensionsOnDisplay.Y *AnimationAccordingToMove,
+                             (int)ImageDimensionsOnDisplay.X, (int)ImageDimensionsOnDisplay.Y);
         }
 
         public override void Update(GameTime gameTime)
@@ -201,7 +201,7 @@ namespace XNAProject
             {
                 Missile missile = new Missile(Game,
                                                 "Missile",
-                                                new Vector2(DestinationRectangle.X + DestinationRectangle.Width/2 - 4, DestinationRectangle.Y - DestinationRectangle.Height/4),
+                                                new Vector2(RectangleImageDimensionsScaled.X + RectangleImageDimensionsScaled.Width/2 - 4, RectangleImageDimensionsScaled.Y - RectangleImageDimensionsScaled.Height/4),
                                                 new Rectangle(0, 0, 30, 40),
                                                 new Vector2(25, 1),
                                                 "Explosion",
