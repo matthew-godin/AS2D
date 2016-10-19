@@ -91,9 +91,9 @@ namespace XNAProject
 
         protected override void PerformAnimationUpdate()
         {
-            SourceRectangle = new Rectangle((SourceRectangle.X + (int)ImageDimensionsOnDisplay.X) % Image.Width,
-                             (int)ImageDimensionsOnDisplay.Y *AnimationAccordingToMove,
-                             (int)ImageDimensionsOnDisplay.X, (int)ImageDimensionsOnDisplay.Y);
+            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width,
+                             (int)Delta.Y * AnimationAccordingToMove,
+                             (int)Delta.X, (int)Delta.Y);
         }
 
         public override void Update(GameTime gameTime)
@@ -130,12 +130,12 @@ namespace XNAProject
         /// <param name="gameTime">Contains time information</param>
         void ManageShipDescent()
         {
-                Position += DescentDisplacementVector;
-                if (Position.Y >= ShipFinalY)
-                {
-                    Position = new Vector2(Position.X, ShipFinalY);
-                    IsDescending = false;
-                }
+            Position += DescentDisplacementVector;
+            if (Position.Y >= ShipFinalY)
+            {
+                Position = new Vector2(Position.X, ShipFinalY);
+                IsDescending = false;
+            }
         }
 
 
@@ -143,12 +143,12 @@ namespace XNAProject
         void PerformDisplacementUpdate()
         {
             PreviousPosition = new Vector2(Position.X, Position.Y);
-            
+
             ManageKeyboard();
 
             ResultingDisplacement = Position - PreviousPosition;
 
-            AnimationAccordingToMove = (IsMoving()? MOVING : NOT_MOVING);
+            AnimationAccordingToMove = (IsMoving() ? MOVING : NOT_MOVING);
 
 
         }
@@ -197,11 +197,11 @@ namespace XNAProject
         {
             int numMissiles = (Game.Components.Where(component => component is Missile && !((Missile)component).ToDestroy && ((Missile)component).Visible).Count());
 
-            if(numMissiles < 3)
+            if (numMissiles < 3)
             {
                 Missile missile = new Missile(Game,
                                                 "Missile",
-                                                new Vector2(RectangleImageDimensionsScaled.X + RectangleImageDimensionsScaled.Width/2 - 4, RectangleImageDimensionsScaled.Y - RectangleImageDimensionsScaled.Height/4),
+                                                new Vector2(RectangleImageDimensionsScaled.X + RectangleImageDimensionsScaled.Width / 2 - 4, RectangleImageDimensionsScaled.Y - RectangleImageDimensionsScaled.Height / 4),
                                                 new Rectangle(0, 0, 30, 40),
                                                 new Vector2(25, 1),
                                                 "Explosion",

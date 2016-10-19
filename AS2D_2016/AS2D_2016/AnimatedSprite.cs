@@ -23,19 +23,19 @@ namespace XNAProject
     public class AnimatedSprite : Sprite, IDestructible
     {
         //Constants
-        protected const int NO_TIME_ELAPSED = 0, NO_DISPLACEMENT = 0;
+        protected const int NO_TIME_ELAPSED = 0, NO_DISPLACEMENT = 0, ORIGIN = 0;
 
         //fireball
         Vector2 ImageDescription { get; set; }
         protected float AnimationUpdateInterval { get; set; }
 
         //Properties initially managed by Initialze
+        protected Rectangle SourceRectangle { get; set; }
         public bool ToDestroy { get; set; }
         float TimeElapsedSinceAnimationUpdate { get; set; }
         //int Row { get; set; }
         //int VariableToChangeName { get; set; }
-
-
+        protected Vector2 Delta { get; set; }
 
         /// <summary>
         /// AnimatedSprite's constructor
@@ -58,43 +58,37 @@ namespace XNAProject
         /// </summary>
         public override void Initialize()
         {
-            base.Initialize();
             LoadContent();
-            ImageDimensionsOnDisplay = new Vector2(Image.Width, Image.Height) / ImageDescription;
+            Delta = ComputeOriginalSpriteDimensions();
+            SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
             ToDestroy = false;
             TimeElapsedSinceAnimationUpdate = NO_TIME_ELAPSED;
-            //Row = 0;
-
-
-            Scale = ComputeScale();
-
-            
-            
+            base.Initialize();
         }
 
         /// <summary>
-        /// Create rsource rectangle
+        /// Computes sprite dimensions as seen in its file
         /// </summary>
-        /// <returns>Returns the rectangle</returns>
-        protected override Rectangle CreateSourceRectangle()
+        /// <returns>Returns the Vector2 containing its dimensions</returns>
+        protected override Vector2 ComputeOriginalSpriteDimensions()
         {
-            return new Rectangle(ORIGIN, ORIGIN, (int)ImageDimensionsOnDisplay.X, (int)ImageDimensionsOnDisplay.Y);
+            return base.ComputeOriginalSpriteDimensions() / ImageDescription;
         }
 
         /// <summary>
-        /// Céer le rectangle des bonnes dimmensions à l'échelle et position d'affichage
+        /// Computes the sprite horizontal scale for the Draw method
         /// </summary>
-        /// <returns>Returns the rectangle</returns>
-        protected override Rectangle CreateRectangleImageDimensionsScaled()
+        protected override float ComputeHorizontalScale()
         {
-            return new Rectangle((int)Position.X, (int)Position.Y, (int)(ImageDimensionsOnDisplay.X * Scale), (int)(ImageDimensionsOnDisplay.Y * Scale));
+            return DisplayZone.Width / Delta.X;
         }
 
-        protected override float ComputeScale()
+        /// <summary>
+        /// Computes the sprite vertical scale for the Draw method
+        /// </summary>
+        protected override float ComputeVerticalScale()
         {
-            float horizontalScale = DisplayZone.Width / ImageDimensionsOnDisplay.X, verticalScale = DisplayZone.Height / ImageDimensionsOnDisplay.Y;
-
-            return horizontalScale < verticalScale ? horizontalScale : verticalScale;
+            return DisplayZone.Height / Delta.Y;
         }
 
         /// <summary>
@@ -102,23 +96,12 @@ namespace XNAProject
         /// </summary>
         protected virtual void PerformAnimationUpdate()
         {
-            //if(Row == ImageDescription.Y)
-            //    Row = 0;
-
-            //VariableToChangeName = (SourceRectangle.X + (int)Delta.X) % Image.Width;
-
-            //SourceRectangle = new Rectangle(VariableToChangeName,
-            //                       (int)Delta.Y * Row, (int)Delta.X, (int)Delta.Y);
-
-            //if(VariableToChangeName == ImageDescription.X - 1)
-            //    ++Row;
-            SourceRectangle = new Rectangle((SourceRectangle.X + (int)ImageDimensionsOnDisplay.X) % Image.Width, SourceRectangle.X >= Image.Width - (int)ImageDimensionsOnDisplay.X ? (SourceRectangle.Y >= Image.Height - (int)ImageDimensionsOnDisplay.Y ? ORIGIN : SourceRectangle.Y + (int)ImageDimensionsOnDisplay.Y) : SourceRectangle.Y, (int)ImageDimensionsOnDisplay.X, (int)ImageDimensionsOnDisplay.Y);
+            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width, SourceRectangle.X >= Image.Width - (int)Delta.X ? (SourceRectangle.Y >= Image.Height - (int)Delta.Y ? ORIGIN : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
         }
 
         public override void Update(GameTime gameTime)
         {
-            //ToDestroy = IsColliding(this); LINE NOT GOOD TO CHANGE
-            CreateRectangleImageDimensionsScaled();
+            RectangleImageDimensionsÀLScale = CalculerRectangleImageDimensionsÀLScale();
 
             TimeElapsedSinceAnimationUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TimeElapsedSinceAnimationUpdate >= AnimationUpdateInterval)
@@ -128,6 +111,14 @@ namespace XNAProject
             }
         }
 
+        /// <summary>
+        /// Draws the AnimatedSprite
+        /// </summary>
+        /// <param name="gameTime">Contains time information</param>
+        public override void Draw(GameTime gameTime)
+        {
+            SpriteMgr.Draw(Image, RectangleImageDimensionsÀLScale, SourceRectangle, Color.White);
+        }
 
         /// <summary>
         /// Predicate true if the Sprite is in collision with another object
@@ -136,27 +127,9 @@ namespace XNAProject
         /// <returns></returns>
         public override bool IsColliding(object otherObject)
         {
-            //AnimatedSprite otherSprite = (AnimatedSprite)otherObject;
-            //Rectangle rectangleCollision = Rectangle.Intersect(RectangleImageDimensionsÀLScale, otherSprite.RectangleImageDimensionsÀLScale);
-            //bool collision = rectangleCollision.Width == NULL_WIDTH && rectangleCollision.Height == NULL_HEIGHT;
-
-            //ToDestroy = collision;
-            //otherSprite.ToDestroy = collision;
-
-            //return collision;
-
             Rectangle otherRectangle = ((AnimatedSprite)otherObject).RectangleImageDimensionsÀLScale;
 
             return RectangleImageDimensionsÀLScale.Intersects(otherRectangle);
-        }
-
-        /// <summary>
-        /// Computes the margins of the AnimatedSprite
-        /// </summary>
-        protected override void ComputeMargins()
-        {
-            RightMargin = Game.Window.ClientBounds.Width - RectangleImageDimensionsÀLScale.Width;
-            BottomMargin = Game.Window.ClientBounds.Height - RectangleImageDimensionsÀLScale.Height;
         }
     }
 }

@@ -11,8 +11,6 @@ Role : DrawableGameComponent
 Created : 5 October 2016
 Modified : 12 October 2016
 Description : Now shows scaled and IsColliding is implemented
-
-Co-author : Raphael Brule
 */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,25 +23,22 @@ namespace XNAProject
     /// </summary>
     public class Sprite : Microsoft.Xna.Framework.DrawableGameComponent, ICollidable
     {
-        protected const int NULL_Y = 0, NULL_X = 0, NULL_HEIGHT = 0, NULL_WIDTH = 0, HALF_SIZE_DIVISOR = 2, ORIGIN = 0;
+        protected const int NULL_Y = 0, NULL_X = 0, NULL_HEIGHT = 0, NULL_WIDTH = 0, HALF_SIZE_DIVISOR = 2;
 
-        //Properties initially managed by the constructor
         string ImageName { get; set; }
-        public Vector2 Position { get; private set; }
+        public Vector2 Position { get; protected set; }
         protected Rectangle DisplayZone { get; set; }
-
-        protected Rectangle SourceRectangle { get; set; }
-        protected Vector2 ImageDimensionsOnDisplay { get; set; }
         protected SpriteBatch SpriteMgr { get; set; }
         protected RessourcesManager<Texture2D> TexturesMgr { get; set; }
-        /* probably private */ protected Texture2D Image { get; set; }
-        protected float Scale { get; set; }
-        //Vector2 Origin { get; set; }
+        /* probably private */
+        protected Texture2D Image { get; set; }
+        float Scale { get; set; }
         protected Rectangle RectangleImageDimensionsScaled { get; set; }
         protected int RightMargin { get; set; }
         protected int BottomMargin { get; set; }
         protected int LeftMargin { get; set; }
         protected int TopMargin { get; set; }
+        Vector2 SpriteDimensions { get; set; }
 
         /// <summary>
         /// Sprite's constructor
@@ -65,43 +60,65 @@ namespace XNAProject
         public override void Initialize()
         {
             base.Initialize();
-            ImageDimensionsOnDisplay = new Vector2(Image.Width, Image.Height);
-            SourceRectangle = CreateSourceRectangle();
             Scale = ComputeScale();
+            SpriteDimensions = ComputeSpriteDimensions();
             //Origin = new Vector2(NULL_X, NULL_Y);
-            RectangleImageDimensionsScaled = CreateRectangleImageDimensionsScaled();
-            TopMargin = NULL_HEIGHT;
-            LeftMargin = NULL_WIDTH;
+            RectangleImageDimensionsScaled = ComputeRectangleImageDimensionsScaled();
+            ComputeMargins();
         }
 
         /// <summary>
-        /// Create source rectangle
+        /// Computes the rectangle representing what will be displayed
         /// </summary>
-        /// <returns>Returns the rectangle</returns>
-        protected virtual Rectangle CreateSourceRectangle()
+        /// <returns>Rectangle representing the perimeter of what will be displayed</returns>
+        protected Rectangle ComputeRectangleImageDimensionsScaled()
         {
-            return new Rectangle(ORIGIN, ORIGIN, (int)ImageDimensionsOnDisplay.X, (int)ImageDimensionsOnDisplay.Y);
+            return new Rectangle((int)Position.X, (int)Position.Y, (int)(SpriteDimensions.X), (int)(SpriteDimensions.Y));
         }
 
         /// <summary>
-        /// Create the scaled rectangle with right dimensions and display position
+        /// Computes the dimensions of the sprite as it will be displayed
         /// </summary>
-        /// <returns>Returns the rectangle</returns>
-        protected virtual Rectangle CreateRectangleImageDimensionsScaled()
+        /// <returns>A Vector2 representing the dimensions of what will be displayed</returns>
+        Vector2 ComputeSpriteDimensions()
         {
-            return new Rectangle((int)Position.X, (int)Position.Y, (int)(ImageDimensionsOnDisplay.X * Scale), (int)(ImageDimensionsOnDisplay.Y * Scale));
+            return new Vector2(Scale, Scale) * ComputeOriginalSpriteDimensions();
+        }
+
+        /// <summary>
+        /// Computes sprite dimensions as seen in its file
+        /// </summary>
+        /// <returns>Returns the Vector2 containing its dimensions</returns>
+        protected virtual Vector2 ComputeOriginalSpriteDimensions()
+        {
+            return new Vector2(Image.Width, Image.Height);
         }
 
         /// <summary>
         /// Computes scale by computing horizontal and vertical scale and the taking smallest
         /// </summary>
         /// <returns>The smallest of horizontal and vertical scales</returns>
-        protected virtual float ComputeScale()
+        protected float ComputeScale()
         {
-            //Added float cast because otherwise it would perform an integer division always yielding 0! Anyway it's good and not good, go check AnimatedSprite.
-            float horizontalScale = DisplayZone.Width / (float)Image.Width, verticalScale = DisplayZone.Height / (float)Image.Height;
+            float horizontalScale = ComputeHorizontalScale(), verticalScale = ComputeVerticalScale();
 
             return horizontalScale < verticalScale ? horizontalScale : verticalScale;
+        }
+
+        /// <summary>
+        /// Computes the horizontal scale of the sprite for the Draw method
+        /// </summary>
+        protected virtual float ComputeHorizontalScale()
+        {
+            return DisplayZone.Width / (float)Image.Width;
+        }
+
+        /// <summary>
+        /// Computes the vertical scale of the sprite for the Draw method
+        /// </summary>
+        protected virtual float ComputeVerticalScale()
+        {
+            return DisplayZone.Height / (float)Image.Height;
         }
 
         /// <summary>
@@ -112,16 +129,17 @@ namespace XNAProject
             SpriteMgr = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
             TexturesMgr = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
             Image = TexturesMgr.Find(ImageName);
-            ComputeMargins();
         }
 
         /// <summary>
-        /// Method drawing the AnimatedSprite on the screen
+        /// Method drawing sprite on the screen
         /// </summary>
         /// <param name="gameTime">Contains time information</param>
         public override void Draw(GameTime gameTime)
         {
-            SpriteMgr.Draw(Image, RectangleImageDimensionsScaled, SourceRectangle, Color.White);
+            //SpriteMgr.Draw(Image, Position, DisplayZone, Color.White, NO_ROTATION, Origin, Scale, SpriteEffects.None, NO_DEPTH_LAYER);
+
+            SpriteMgr.Draw(Image, RectangleImageDimensionsScaled, Color.White);
         }
 
         /// <summary>
@@ -153,8 +171,8 @@ namespace XNAProject
         {
             RightMargin = Game.Window.ClientBounds.Width - RectangleImageDimensionsScaled.Width;
             BottomMargin = Game.Window.ClientBounds.Height - RectangleImageDimensionsScaled.Height;
+            TopMargin = NULL_HEIGHT;
+            LeftMargin = NULL_WIDTH;
         }
-
-
     }
 }
