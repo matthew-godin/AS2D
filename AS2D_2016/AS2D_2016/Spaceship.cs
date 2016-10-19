@@ -4,6 +4,8 @@
    Description :       This component, child of AnimatedSprite,
                        manages the spaceship.*/
 
+// Modification : Modifications for the descent of the ship at the beginning
+//                Matthew Godin
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +27,7 @@ namespace XNAProject
         //Constant
         const int NOT_MOVING = 0;
         const int MOVING = 1;
-        const int NUM_PIXELS_MOVING = 5;
+        const int NUM_PIXELS_MOVING = 4; // Changed it from 5 to 4
 
         //Property initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
@@ -40,6 +42,10 @@ namespace XNAProject
 
         //to check
         Vector2 ResultingDisplacement { get; set; }
+        // Added for ship descent
+        int ShipFinalY { get; set; }
+        bool IsDescending { get; set; }
+        Vector2 DescentDisplacementVector { get; set; } // Other similar things could be done in the rest of the class for optimization
 
 
         /// <summary>
@@ -66,13 +72,14 @@ namespace XNAProject
         {
             base.Initialize();
 
-            Position = new Vector2(Position.X - DestinationRectangle.Width/2,
-                                   Game.Window.ClientBounds.Height - DestinationRectangle.Height);
+            //To erase with the descent of the ship now : Position = new Vector2(Position.X - DestinationRectangle.Width/2, Game.Window.ClientBounds.Height - DestinationRectangle.Height); 
+            Position = new Vector2(Position.X - DestinationRectangle.Width / HALF_SIZE_DIVISOR, Position.Y - DestinationRectangle.Height / HALF_SIZE_DIVISOR); // Nouvelle ligne
             TimeSpentSinceUpdate = 0;
             AnimationAccordingToMove = 0;
             PreviousPosition = new Vector2(Position.X, Position.Y);
-
-            
+            ShipFinalY = Game.Window.ClientBounds.Height - DestinationRectangle.Height; // Nouvelle ligne
+            IsDescending = true; // Nouvelle ligne
+            DescentDisplacementVector = new Vector2(NO_DISPLACEMENT, NUM_PIXELS_MOVING);
         }
 
         protected override void LoadContent()
@@ -92,7 +99,6 @@ namespace XNAProject
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
             //Added for missile
             if (InputMgr.IsNewKey(Keys.Space))
                 LaunchMissile();
@@ -101,10 +107,38 @@ namespace XNAProject
             TimeSpentSinceUpdate += TimeElapased;
             if (TimeSpentSinceUpdate >= DisplacementUpdateInterval)
             {
+                DetermineIfShipIsDescending(); // New method
                 PerformDisplacementUpdate();
-                TimeSpentSinceUpdate = 0;
+                TimeSpentSinceUpdate = NO_TIME_ELAPSED;
             }
         }
+
+        /// <summary>
+        /// Determine if at beginning of game and move ship down if that is the case
+        /// </summary>
+        void DetermineIfShipIsDescending()
+        {
+            if (IsDescending)
+            {
+                ManageShipDescent(); // New method
+            }
+        }
+
+        /// <summary>
+        /// Manages the descent of the ship at the beginning of the game
+        /// </summary>
+        /// <param name="gameTime">Contains time information</param>
+        void ManageShipDescent()
+        {
+                Position += DescentDisplacementVector;
+                if (Position.Y >= ShipFinalY)
+                {
+                    Position = new Vector2(Position.X, ShipFinalY);
+                    IsDescending = false;
+                }
+        }
+
+
 
         void PerformDisplacementUpdate()
         {

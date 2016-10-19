@@ -146,7 +146,7 @@ namespace XNAProject
         /// Manages the explosion of the missile
         /// </summary>
         /// <param name="gameTime">Contains time information</param>
-        private void ManageExplosion(GameTime gameTime)
+        void ManageExplosion(GameTime gameTime)
         {
             TimeSpentSinceUpdateExplosion += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TimeSpentSinceUpdateExplosion >= SLOW_ANIMATION_INTERVAL)
