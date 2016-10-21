@@ -95,6 +95,7 @@ namespace XNAProject
         protected virtual void PerformDisplacementUpdate()
         {
             Position += DisplacementUpdateVector;
+            RectangleImageDimensionsÀLScale = CalculerRectangleImageDimensionsÀLScale();
             if (Position.X <= LeftMargin || Position.X >= RightMargin)
             {
                 DisplacementAngle = FLAT_ANGLE - DisplacementAngle;

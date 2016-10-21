@@ -118,6 +118,7 @@ namespace XNAProject
         {
             Position -= DisplacementUpdateVector;
             DisplacementUpdateInterval -= ImageName;
+            RectangleImageDimensionsScaled = CalculerRectangleImageDimensionsScaled();
             if (Position.Y <= TopMargin && !ExplosionActivated)
             {
                 ActivateExplosion();

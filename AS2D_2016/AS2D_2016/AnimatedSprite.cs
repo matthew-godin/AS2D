@@ -101,8 +101,6 @@ namespace XNAProject
 
         public override void Update(GameTime gameTime)
         {
-            RectangleImageDimensionsÀLScale = CalculerRectangleImageDimensionsÀLScale();
-
             TimeElapsedSinceAnimationUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TimeElapsedSinceAnimationUpdate >= AnimationUpdateInterval)
             {

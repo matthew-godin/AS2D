@@ -31,7 +31,7 @@ namespace XNAProject
         protected SpriteBatch SpriteMgr { get; set; }
         protected RessourcesManager<Texture2D> TexturesMgr { get; set; }
         /* probably private */
-        protected Texture2D Image { get; set; }
+        protected Texture2D Image { get; private set; }
         float Scale { get; set; }
         protected Rectangle RectangleImageDimensionsScaled { get; set; }
         protected int RightMargin { get; set; }
