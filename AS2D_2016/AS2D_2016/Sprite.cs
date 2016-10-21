@@ -33,7 +33,7 @@ namespace XNAProject
         /* probably private */
         Texture2D Image { get; set; }
         float Scale { get; set; }
-        protected Rectangle RectangleImageDimensionsScaled { get; set; }
+        protected Rectangle ImageRectangleToDisplay { get; set; }
         protected int RightMargin { get; set; }
         protected int BottomMargin { get; set; }
         protected int LeftMargin { get; set; }
@@ -66,7 +66,7 @@ namespace XNAProject
             Scale = ComputeScale();
             SpriteDimensions = ComputeSpriteDimensions();
             //Origin = new Vector2(NULL_X, NULL_Y);
-            RectangleImageDimensionsScaled = ComputeRectangleImageDimensionsScaled();
+            ImageRectangleToDisplay = ComputeImageRectangleToDisplay();
             SourceRectangle = ComputeSourceRectangle();
             ComputeMargins();
         }
@@ -93,7 +93,7 @@ namespace XNAProject
         /// Computes the rectangle representing what will be displayed
         /// </summary>
         /// <returns>Rectangle representing the perimeter of what will be displayed</returns>
-        protected Rectangle ComputeRectangleImageDimensionsScaled()
+        protected Rectangle ComputeImageRectangleToDisplay()
         {
             return new Rectangle((int)Position.X, (int)Position.Y, (int)(SpriteDimensions.X), (int)(SpriteDimensions.Y));
         }
@@ -161,7 +161,7 @@ namespace XNAProject
         {
             //SpriteMgr.Draw(Image, Position, DisplayZone, Color.White, NO_ROTATION, Origin, Scale, SpriteEffects.None, NO_DEPTH_LAYER);
 
-            SpriteMgr.Draw(Image, RectangleImageDimensionsScaled, SourceRectangle, Color.White);
+            SpriteMgr.Draw(Image, ImageRectangleToDisplay, SourceRectangle, Color.White);
         }
 
         /// <summary>
@@ -191,8 +191,8 @@ namespace XNAProject
         /// </summary>
         protected virtual void ComputeMargins()
         {
-            RightMargin = Game.Window.ClientBounds.Width - RectangleImageDimensionsScaled.Width;
-            BottomMargin = Game.Window.ClientBounds.Height - RectangleImageDimensionsScaled.Height;
+            RightMargin = Game.Window.ClientBounds.Width - ImageRectangleToDisplay.Width;
+            BottomMargin = Game.Window.ClientBounds.Height - ImageRectangleToDisplay.Height;
             TopMargin = NULL_HEIGHT;
             LeftMargin = NULL_WIDTH;
         }

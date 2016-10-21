@@ -131,9 +131,9 @@ namespace XNAProject
         /// <returns></returns>
         public override bool IsColliding(object otherObject)
         {
-            Rectangle otherRectangle = ((AnimatedSprite)otherObject).RectangleImageDimensionsÀLScale;
+            Rectangle otherRectangle = ((AnimatedSprite)otherObject).RectangleImageÀAfficher;
 
-            return RectangleImageDimensionsÀLScale.Intersects(otherRectangle);
+            return RectangleImageÀAfficher.Intersects(otherRectangle);
         }
     }
 }
