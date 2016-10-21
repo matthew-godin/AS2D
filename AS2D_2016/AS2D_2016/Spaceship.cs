@@ -101,7 +101,7 @@ namespace XNAProject
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            //Added for missile
+            
             if (InputMgr.IsNewKey(Keys.Space))
                 LaunchMissile();
 
@@ -190,28 +190,34 @@ namespace XNAProject
         /// </summary>
         /// <param name="displacement">Horizontal displacement</param>
         /// <param name="currentPosition">Current position</param>
-        /// <param name="MinThreshold"></param>
-        /// <param name="MaxThreshold"></param>
-        /// <returns></returns>
+        /// <param name="MinThreshold">Positions's minimum threshold</param>
+        /// <param name="MaxThreshold">Positions's maximum threshold</param>
+        /// <returns>Horizontal position</returns>
         float ComputePosition(int displacement, float currentPosition, int MinThreshold, int MaxThreshold)
         {
             float position = currentPosition + displacement;
             return MathHelper.Min(MathHelper.Max(MinThreshold, position), MaxThreshold);
         }
 
+        /// <summary>
+        /// Verifies if ship is moving
+        /// </summary>
+        /// <returns>True or false</returns>
         bool IsMoving()
         {
             return ResultingDisplacement != Vector2.Zero;
         }
 
+        /// <summary>
+        /// Launches missiles according to defined maximum
+        /// </summary>
         void LaunchMissile()
         {
             int numMissiles = (Game.Components.Where(component => component is Missile && !((Missile)component).ToDestroy && ((Missile)component).Visible).Count());
 
             if (numMissiles < MAX_NUM_MISSILES)
             {
-                Missile missile = new Missile(Game,
-                                                "Missile",
+                Missile missile = new Missile(Game, "Missile",
                                                 new Vector2(RectangleImageDimensionsScaled.X + RectangleImageDimensionsScaled.Width / 2 - 4, RectangleImageDimensionsScaled.Y - RectangleImageDimensionsScaled.Height / 4),
                                                 new Rectangle(0, 0, 30, 40),
                                                 new Vector2(25, 1),
