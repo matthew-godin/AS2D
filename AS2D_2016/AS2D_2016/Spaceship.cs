@@ -127,6 +127,7 @@ namespace XNAProject
         void ManageShipDescent()
         {
             Position += DescentDisplacementVector;
+            RectangleImageDimensionsScaled = ComputeRectangleImageDimensionsScaled();
             if (Position.Y >= ShipFinalY)
             {
                 Position = new Vector2(Position.X, ShipFinalY);
@@ -139,14 +140,10 @@ namespace XNAProject
         void PerformDisplacementUpdate()
         {
             PreviousPosition = new Vector2(Position.X, Position.Y);
-
             ManageKeyboard();
-
+            RectangleImageDimensionsScaled = ComputeRectangleImageDimensionsScaled();
             ResultingDisplacement = Position - PreviousPosition;
-
             AnimationAccordingToMove = (IsMoving() ? MOVING : NOT_MOVING);
-
-
         }
 
         void ManageKeyboard()
