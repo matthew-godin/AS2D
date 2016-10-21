@@ -85,17 +85,21 @@ namespace XNAProject
         /// <param name="gameTime">Contains time information</param>
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-            TimeSpentSinceDisplacementUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (TimeSpentSinceDisplacementUpdate >= DisplacementUpdateInterval)
+            if (!ExplosionActivated)
             {
-                PerformDisplacementUpdate();
-                TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
+                base.Update(gameTime);
+                TimeSpentSinceDisplacementUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (TimeSpentSinceDisplacementUpdate >= DisplacementUpdateInterval)
+                {
+                    PerformDisplacementUpdate();
+                    TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
+                }
             }
-            if (ExplosionActivated)
+            else
             {
                 ManageExplosion(gameTime);
-            }
+            } 
+
             if (Collision)
             {
                 Collision = false;
@@ -150,7 +154,6 @@ namespace XNAProject
                 {
                     ExplosionActivated = false;
                     Explosion.ToDestroy = true;
-                    Game.Components.Remove(Explosion);
                     ToDestroy = true;
                 }
             }
