@@ -31,7 +31,7 @@ namespace XNAProject
         protected SpriteBatch SpriteMgr { get; set; }
         protected RessourcesManager<Texture2D> TexturesMgr { get; set; }
         /* probably private */
-        protected Texture2D Image { get; private set; }
+        Texture2D Image { get; set; }
         float Scale { get; set; }
         protected Rectangle RectangleImageDimensionsScaled { get; set; }
         protected int RightMargin { get; set; }
@@ -39,6 +39,8 @@ namespace XNAProject
         protected int LeftMargin { get; set; }
         protected int TopMargin { get; set; }
         Vector2 SpriteDimensions { get; set; }
+        protected Vector2 ImageDimensions { get; private set; }
+        protected Rectangle SourceRectangle { get; set; }
 
         /// <summary>
         /// Sprite's constructor
@@ -60,11 +62,31 @@ namespace XNAProject
         public override void Initialize()
         {
             base.Initialize();
+            ImageDimensions = ComputeImageDimensions();
             Scale = ComputeScale();
             SpriteDimensions = ComputeSpriteDimensions();
             //Origin = new Vector2(NULL_X, NULL_Y);
             RectangleImageDimensionsScaled = ComputeRectangleImageDimensionsScaled();
+            SourceRectangle = ComputeSourceRectangle();
             ComputeMargins();
+        }
+
+        /// <summary>
+        /// Computes rectangle covering what will be displayed
+        /// </summary>
+        /// <returns>Source Rectangle</returns>
+        protected virtual Rectangle ComputeSourceRectangle()
+        {
+            return new Rectangle(NULL_X, NULL_Y, Image.Width, Image.Height);
+        }
+
+        /// <summary>
+        /// Computes the image dimensions
+        /// </summary>
+        /// <returns>Vector2 containing the image dimensions</returns>
+        Vector2 ComputeImageDimensions()
+        {
+            return new Vector2(Image.Width, Image.Height);
         }
 
         /// <summary>
@@ -139,7 +161,7 @@ namespace XNAProject
         {
             //SpriteMgr.Draw(Image, Position, DisplayZone, Color.White, NO_ROTATION, Origin, Scale, SpriteEffects.None, NO_DEPTH_LAYER);
 
-            SpriteMgr.Draw(Image, RectangleImageDimensionsScaled, Color.White);
+            SpriteMgr.Draw(Image, RectangleImageDimensionsScaled, SourceRectangle, Color.White);
         }
 
         /// <summary>

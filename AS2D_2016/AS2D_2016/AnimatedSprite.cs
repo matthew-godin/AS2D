@@ -23,19 +23,20 @@ namespace XNAProject
     public class AnimatedSprite : Sprite, IDestructible
     {
         //Constants
-        protected const int NO_TIME_ELAPSED = 0, NO_DISPLACEMENT = 0, ORIGIN = 0;
+        protected const int NO_TIME_ELAPSED = 0, NO_DISPLACEMENT = 0;
 
         //fireball
         Vector2 ImageDescription { get; set; }
         protected float AnimationUpdateInterval { get; set; }
 
         //Properties initially managed by Initialze
-        protected Rectangle SourceRectangle { get; set; }
         public bool ToDestroy { get; set; }
         float TimeElapsedSinceAnimationUpdate { get; set; }
         //int Row { get; set; }
         //int VariableToChangeName { get; set; }
         protected Vector2 Delta { get; set; }
+        int AnimationFrameWidth { get; set; }
+        int AnimationFrameHeight { get; set; }
 
         /// <summary>
         /// AnimatedSprite's constructor
@@ -60,10 +61,11 @@ namespace XNAProject
         {
             LoadContent();
             Delta = ComputeOriginalSpriteDimensions();
-            SourceRectangle = new Rectangle(ORIGIN, ORIGIN, (int)Delta.X, (int)Delta.Y);
             ToDestroy = false;
             TimeElapsedSinceAnimationUpdate = NO_TIME_ELAPSED;
             base.Initialize();
+            AnimationFrameWidth = (int)ImageDimensions.X - (int)Delta.X;
+            AnimationFrameHeight = (int)ImageDimensions.Y - (int)Delta.Y;
         }
 
         /// <summary>
@@ -73,6 +75,15 @@ namespace XNAProject
         protected override Vector2 ComputeOriginalSpriteDimensions()
         {
             return base.ComputeOriginalSpriteDimensions() / ImageDescription;
+        }
+
+        /// <summary>
+        /// Computes rectangle covering what will be displayed
+        /// </summary>
+        /// <returns>Source Rectangle</returns>
+        protected override Rectangle ComputeSourceRectangle()
+        {
+            return new Rectangle(NULL_X, NULL_Y, (int)Delta.X, (int)Delta.Y);
         }
 
         /// <summary>
@@ -96,9 +107,13 @@ namespace XNAProject
         /// </summary>
         protected virtual void PerformAnimationUpdate()
         {
-            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width, SourceRectangle.X >= Image.Width - (int)Delta.X ? (SourceRectangle.Y >= Image.Height - (int)Delta.Y ? ORIGIN : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
+            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % (int)ImageDimensions.X, SourceRectangle.X >= AnimationFrameWidth ? (SourceRectangle.Y >= AnimationFrameHeight ? NULL_Y : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
         }
 
+        /// <summary>
+        /// Updates the animated sprite
+        /// </summary>
+        /// <param name="gameTime">Contains time information</param>
         public override void Update(GameTime gameTime)
         {
             TimeElapsedSinceAnimationUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -110,18 +125,9 @@ namespace XNAProject
         }
 
         /// <summary>
-        /// Draws the AnimatedSprite
-        /// </summary>
-        /// <param name="gameTime">Contains time information</param>
-        public override void Draw(GameTime gameTime)
-        {
-            SpriteMgr.Draw(Image, RectangleImageDimensionsÀLScale, SourceRectangle, Color.White);
-        }
-
-        /// <summary>
         /// Predicate true if the Sprite is in collision with another object
         /// </summary>
-        /// <param name="otherObject"></param>
+        /// <param name="otherObject">L'autre objet qui pourrait être en collision</param>
         /// <returns></returns>
         public override bool IsColliding(object otherObject)
         {

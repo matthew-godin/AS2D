@@ -91,9 +91,7 @@ namespace XNAProject
         /// </summary>
         protected override void PerformAnimationUpdate()
         {
-            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width,
-                             (int)Delta.Y * AnimationAccordingToMove,
-                             (int)Delta.X, (int)Delta.Y);
+            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % (int)ImageDimensions.X, (int)Delta.Y * AnimationAccordingToMove, (int)Delta.X, (int)Delta.Y);
         }
 
         /// <summary>
