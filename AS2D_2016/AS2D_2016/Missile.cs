@@ -31,7 +31,6 @@ namespace XNAProject
         Texture2D ExplosionImage { get; set; }
         float TimeSpentSinceDisplacementUpdate { get; set; }
         public bool ExplosionActivated { get; private set; }
-        float TimeSpentSinceUpdateExplosion { get; set; }
         int ExplosionPhase { get; set; }
         public AnimatedSprite Explosion { get; private set; }
         Vector2 DisplacementUpdateVector { get; set; }
@@ -86,19 +85,23 @@ namespace XNAProject
         public override void Update(GameTime gameTime)
         {
 
-            base.Update(gameTime);
+            
             TimeSpentSinceDisplacementUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TimeSpentSinceDisplacementUpdate >= (ExplosionActivated? SLOW_ANIMATION_INTERVAL:DisplacementUpdateInterval))
             {
                 if (!ExplosionActivated)
                 {
+                    base.Update(gameTime);
                     PerformDisplacementUpdate();
                     TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
                 }
                 else
+                {
                     ManageExplosion();
-            }
+                    TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
+                }
 
+            }
 
             if (Collision)
             {
@@ -114,13 +117,12 @@ namespace XNAProject
         {
             Position -= DisplacementUpdateVector;
             DisplacementUpdateInterval -= ImageName;
-            RectangleImageDimensionsScaled = CalculerRectangleImageDimensionsScaled();
+            ImageRectangleToDisplay = ComputeImageRectangleToDisplay();
             if (Position.Y <= TopMargin && !ExplosionActivated)
             {
                 ActivateExplosion();
             }
         }
-
         
 
         /// <summary>
@@ -143,7 +145,6 @@ namespace XNAProject
         void ManageExplosion()
         {
             ++ExplosionPhase;
-            TimeSpentSinceUpdateExplosion = NO_TIME_ELAPSED;
             if (ExplosionPhase >= ImageExplosionDescription.X * ImageExplosionDescription.Y)
             {
                 ExplosionActivated = false;
