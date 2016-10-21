@@ -117,7 +117,7 @@ namespace XNAProject
         {
             Position -= DisplacementUpdateVector;
             DisplacementUpdateInterval -= ImageName;
-            ImageRectangleToDisplay = ComputeImageRectangleToDisplay();
+            ComputeImageRectangleToDisplay();
             if (Position.Y <= TopMargin && !ExplosionActivated)
             {
                 ActivateExplosion();
@@ -133,7 +133,6 @@ namespace XNAProject
             Visible = false;
             Explosion = new AnimatedSprite(Game, "Explosion", Position, ExplosionZone, ImageExplosionDescription, SLOW_ANIMATION_INTERVAL);
             ExplosionActivated = true;
-            TimeSpentSinceUpdateExplosion = NO_TIME_ELAPSED;
             ExplosionPhase = BEFORE_EXPLOSION_FIRST_PHASE;
             Collision = true;
         }

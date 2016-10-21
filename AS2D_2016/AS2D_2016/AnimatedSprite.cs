@@ -123,17 +123,5 @@ namespace XNAProject
                 TimeElapsedSinceAnimationUpdate = NO_TIME_ELAPSED;
             }
         }
-
-        /// <summary>
-        /// Predicate true if the Sprite is in collision with another object
-        /// </summary>
-        /// <param name="otherObject">L'autre objet qui pourrait être en collision</param>
-        /// <returns></returns>
-        public override bool IsColliding(object otherObject)
-        {
-            Rectangle otherRectangle = ((AnimatedSprite)otherObject).RectangleImageÀAfficher;
-
-            return RectangleImageÀAfficher.Intersects(otherRectangle);
-        }
     }
 }

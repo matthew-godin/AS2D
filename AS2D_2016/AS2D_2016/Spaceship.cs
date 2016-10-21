@@ -69,9 +69,9 @@ namespace XNAProject
             TimeSpentSinceUpdate = 0;
             AnimationAccordingToMove = 0;
             //To erase with the descent of the ship now : Position = new Vector2(Position.X - DestinationRectangle.Width/2, Game.Window.ClientBounds.Height - DestinationRectangle.Height); 
-            Position = new Vector2(Position.X - ImageRectangleToDisplay.Width / HALF_SIZE_DIVISOR, Position.Y - ImageRectangleToDisplay.Height / HALF_SIZE_DIVISOR); // Nouvelle ligne
+            Position = new Vector2(Position.X - SpriteDimensions.X / HALF_SIZE_DIVISOR, Position.Y - SpriteDimensions.Y / HALF_SIZE_DIVISOR); // Nouvelle ligne
             PreviousPosition = new Vector2(Position.X, Position.Y);
-            ShipFinalY = Game.Window.ClientBounds.Height - ImageRectangleToDisplay.Height; 
+            ShipFinalY = Game.Window.ClientBounds.Height - (int)SpriteDimensions.Y; 
             IsDescending = true;
             DescentDisplacementVector = new Vector2(NO_DISPLACEMENT, NUM_PIXELS_MOVING);
             ResultingDisplacement = Position - PreviousPosition;
@@ -132,7 +132,7 @@ namespace XNAProject
         void ManageShipDescent()
         {
             Position += DescentDisplacementVector;
-            ImageRectangleToDisplay = ComputeImageRectangleToDisplay();
+            ComputeImageRectangleToDisplay();
             if (Position.Y >= ShipFinalY)
             {
                 Position = new Vector2(Position.X, ShipFinalY);
@@ -147,7 +147,7 @@ namespace XNAProject
         {
             PreviousPosition = new Vector2(Position.X, Position.Y);
             ManageKeyboard();
-            ImageRectangleToDisplay = ComputeImageRectangleToDisplay();
+            ComputeImageRectangleToDisplay();
             ResultingDisplacement = Position - PreviousPosition;
             AnimationAccordingToMove = (IsMoving() ? MOVING : NOT_MOVING);
         }
@@ -218,7 +218,7 @@ namespace XNAProject
             if (numMissiles < MAX_NUM_MISSILES)
             {
                 Missile missile = new Missile(Game, "Missile",
-                                                new Vector2(ImageRectangleToDisplay.X + ImageRectangleToDisplay.Width / 2 - 4, ImageRectangleToDisplay.Y - ImageRectangleToDisplay.Height / 4),
+                                                new Vector2(Position.X + SpriteDimensions.X / HALF_SIZE_DIVISOR - 4, Position.Y - SpriteDimensions.Y / 4),
                                                 new Rectangle(0, 0, 30, 40),
                                                 new Vector2(25, 1),
                                                 "Explosion",

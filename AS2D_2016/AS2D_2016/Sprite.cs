@@ -33,12 +33,12 @@ namespace XNAProject
         /* probably private */
         Texture2D Image { get; set; }
         float Scale { get; set; }
-        protected Rectangle ImageRectangleToDisplay { get; set; }
+        Rectangle ImageRectangleToDisplay { get; set; }
         protected int RightMargin { get; set; }
         protected int BottomMargin { get; set; }
         protected int LeftMargin { get; set; }
         protected int TopMargin { get; set; }
-        Vector2 SpriteDimensions { get; set; }
+        protected Vector2 SpriteDimensions { get; private set; }
         protected Vector2 ImageDimensions { get; private set; }
         protected Rectangle SourceRectangle { get; set; }
 
@@ -66,7 +66,7 @@ namespace XNAProject
             Scale = ComputeScale();
             SpriteDimensions = ComputeSpriteDimensions();
             //Origin = new Vector2(NULL_X, NULL_Y);
-            ImageRectangleToDisplay = ComputeImageRectangleToDisplay();
+            ComputeImageRectangleToDisplay();
             SourceRectangle = ComputeSourceRectangle();
             ComputeMargins();
         }
@@ -93,9 +93,9 @@ namespace XNAProject
         /// Computes the rectangle representing what will be displayed
         /// </summary>
         /// <returns>Rectangle representing the perimeter of what will be displayed</returns>
-        protected Rectangle ComputeImageRectangleToDisplay()
+        protected void ComputeImageRectangleToDisplay()
         {
-            return new Rectangle((int)Position.X, (int)Position.Y, (int)(SpriteDimensions.X), (int)(SpriteDimensions.Y));
+            ImageRectangleToDisplay = new Rectangle((int)Position.X, (int)Position.Y, (int)(SpriteDimensions.X), (int)(SpriteDimensions.Y));
         }
 
         /// <summary>
@@ -167,23 +167,13 @@ namespace XNAProject
         /// <summary>
         /// True if Sprite is colliding with another object
         /// </summary>
-        /// <param name="otherObject"></param>
+        /// <param name="otherObject">The other object that could be colliding with this Sprite</param>
         /// <returns></returns>
-        public virtual bool IsColliding(object otherObject)
+        public bool IsColliding(object otherObject)
         {
-            //AnimatedSprite otherSprite = (AnimatedSprite)otherObject;
-            //Rectangle rectangleCollision = Rectangle.Intersect(RectangleImageDimensionsScaled, otherSprite.RectangleImageDimensionsScaled);
-            //bool collision = rectangleCollision.Width == NULL_WIDTH && rectangleCollision.Height == NULL_HEIGHT;
+            Rectangle otherRectangle = ((AnimatedSprite)otherObject).ImageRectangleToDisplay;
 
-            //otherSprite.ToDestroy = collision;
-            //return collision;
-
-            //Rectangle otherRectangle = ((AnimatedSprite)otherObject).DestinationRectangle;
-
-            //return DisplayZone.Intersects(otherRectangle);
-
-            return true;
-
+            return ImageRectangleToDisplay.Intersects(otherRectangle);
         }
 
         /// <summary>
