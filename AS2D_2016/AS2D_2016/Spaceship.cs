@@ -18,10 +18,13 @@ namespace XNAProject
     public class Spaceship : AnimatedSprite
     {
         //Constant
-        const int NOT_MOVING = 0;
-        const int MOVING = 1;
-        const int NUM_PIXELS_MOVING = 4; // Changed it from 5 to 4
-        const int MAX_NUM_MISSILES = 3;
+        const int NOT_MOVING = 0,
+                  MOVING = 1,
+                  NUM_PIXELS_MOVING = 4, // Changed it from 5 to 4
+                  MAX_NUM_MISSILES = 3,
+                  MAX_MISSILE_HEIGHT = 40,
+                  NUM_MISSILES_IN_FRAME = 25;
+
 
         //Property initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
@@ -219,8 +222,8 @@ namespace XNAProject
             {
                 Missile missile = new Missile(Game, "Missile",
                                                 new Vector2(Position.X + SpriteDimensions.X / HALF_SIZE_DIVISOR - 4, Position.Y - SpriteDimensions.Y / 4),
-                                                new Rectangle(0, 0, 30, 40),
-                                                new Vector2(25, 1),
+                                                new Rectangle(NULL_X, NULL_Y, MAX_MISSILE_HEIGHT, MAX_MISSILE_HEIGHT),
+                                                new Vector2(NUM_MISSILES_IN_FRAME, 1),
                                                 "Explosion",
                                                 new Vector2(5, 4),
                                                 1.5f * GameProject.STANDARD_INTERVAL,
