@@ -85,20 +85,20 @@ namespace XNAProject
         /// <param name="gameTime">Contains time information</param>
         public override void Update(GameTime gameTime)
         {
-            if (!ExplosionActivated)
+
+            base.Update(gameTime);
+            TimeSpentSinceDisplacementUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (TimeSpentSinceDisplacementUpdate >= (ExplosionActivated? SLOW_ANIMATION_INTERVAL:DisplacementUpdateInterval))
             {
-                base.Update(gameTime);
-                TimeSpentSinceDisplacementUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (TimeSpentSinceDisplacementUpdate >= DisplacementUpdateInterval)
+                if (!ExplosionActivated)
                 {
                     PerformDisplacementUpdate();
                     TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
                 }
+                else
+                    ManageExplosion();
             }
-            else
-            {
-                ManageExplosion(gameTime);
-            } 
+
 
             if (Collision)
             {
@@ -118,8 +118,6 @@ namespace XNAProject
             if (Position.Y <= TopMargin && !ExplosionActivated)
             {
                 ActivateExplosion();
-                //ManageExplosion(gameTime);
-                //ToDestroy = true;
             }
         }
 
@@ -130,7 +128,6 @@ namespace XNAProject
         /// </summary>
         public void ActivateExplosion()
         {
-            //ToDestroy = true;//ESSENTIAL LINE!!!
             Visible = false;
             Explosion = new AnimatedSprite(Game, "Explosion", Position, ExplosionZone, ImageExplosionDescription, SLOW_ANIMATION_INTERVAL);
             ExplosionActivated = true;
@@ -143,19 +140,15 @@ namespace XNAProject
         /// Manages the explosion of the missile
         /// </summary>
         /// <param name="gameTime">Contains time information</param>
-        void ManageExplosion(GameTime gameTime)
+        void ManageExplosion()
         {
-            TimeSpentSinceUpdateExplosion += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (TimeSpentSinceUpdateExplosion >= SLOW_ANIMATION_INTERVAL)
+            ++ExplosionPhase;
+            TimeSpentSinceUpdateExplosion = NO_TIME_ELAPSED;
+            if (ExplosionPhase >= ImageExplosionDescription.X * ImageExplosionDescription.Y)
             {
-                ++ExplosionPhase;
-                TimeSpentSinceUpdateExplosion = NO_TIME_ELAPSED;
-                if (ExplosionPhase >= ImageExplosionDescription.X * ImageExplosionDescription.Y)
-                {
-                    ExplosionActivated = false;
-                    Explosion.ToDestroy = true;
-                    ToDestroy = true;
-                }
+                ExplosionActivated = false;
+                Explosion.ToDestroy = true;
+                ToDestroy = true;
             }
         }
     }
