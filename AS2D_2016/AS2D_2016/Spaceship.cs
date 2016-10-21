@@ -6,16 +6,9 @@
 
 // Modification : Modifications for the descent of the ship at the beginning
 //                Matthew Godin
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
 namespace XNAProject
 {
@@ -36,16 +29,14 @@ namespace XNAProject
         float TimeSpentSinceUpdate { get; set; }
         int AnimationAccordingToMove { get; set; }
         Vector2 PreviousPosition { get; set; }
-
-        //Property initially managed by LoadContent
-        InputManager InputMgr { get; set; }
-
-        //to check
-        Vector2 ResultingDisplacement { get; set; }
         // Added for ship descent
         int ShipFinalY { get; set; }
         bool IsDescending { get; set; }
         Vector2 DescentDisplacementVector { get; set; } // Other similar things could be done in the rest of the class for optimization
+        Vector2 ResultingDisplacement { get; set; }
+
+        //Property initially managed by LoadContent
+        InputManager InputMgr { get; set; }
 
 
         /// <summary>
@@ -68,24 +59,29 @@ namespace XNAProject
             DisplacementUpdateInterval = displacementUpdateInterval;
         }
 
+        /// <summary>
+        /// Initializes the spaceship's properties
+        /// </summary>
         public override void Initialize()
         {
             base.Initialize();
-
-            //To erase with the descent of the ship now : Position = new Vector2(Position.X - DestinationRectangle.Width/2, Game.Window.ClientBounds.Height - DestinationRectangle.Height); 
-            Position = new Vector2(Position.X - RectangleImageDimensionsScaled.Width / HALF_SIZE_DIVISOR, Position.Y - RectangleImageDimensionsScaled.Height / HALF_SIZE_DIVISOR); // Nouvelle ligne
             TimeSpentSinceUpdate = 0;
             AnimationAccordingToMove = 0;
+            //To erase with the descent of the ship now : Position = new Vector2(Position.X - DestinationRectangle.Width/2, Game.Window.ClientBounds.Height - DestinationRectangle.Height); 
+            Position = new Vector2(Position.X - RectangleImageDimensionsScaled.Width / HALF_SIZE_DIVISOR, Position.Y - RectangleImageDimensionsScaled.Height / HALF_SIZE_DIVISOR); // Nouvelle ligne
             PreviousPosition = new Vector2(Position.X, Position.Y);
-            ShipFinalY = Game.Window.ClientBounds.Height - RectangleImageDimensionsScaled.Height; // Nouvelle ligne
-            IsDescending = true; // Nouvelle ligne
+            ShipFinalY = Game.Window.ClientBounds.Height - RectangleImageDimensionsScaled.Height; 
+            IsDescending = true;
             DescentDisplacementVector = new Vector2(NO_DISPLACEMENT, NUM_PIXELS_MOVING);
+            ResultingDisplacement = Position - PreviousPosition;
         }
 
+        /// <summary>
+        /// Charge le(s) composent(s) necessaire(s)
+        /// </summary>
         protected override void LoadContent()
         {
             base.LoadContent();
-
             InputMgr = Game.Services.GetService(typeof(InputManager)) as InputManager;
         }
 
@@ -184,14 +180,6 @@ namespace XNAProject
         {
             return ResultingDisplacement != Vector2.Zero;
         }
-
-        //public override void Draw(GameTime gameTime)
-        //{
-        //    //SpriteMgr.Draw(Image, Position, SourceRectangle, Color.White);
-
-        //    SpriteMgr.Draw(Image, new Rectangle((int)Position.X, (int)Position.Y, (int)(Delta.X*Scale), (int)(Delta.Y*Scale)),
-        //                        SourceRectangle, Color.White);
-        //}
 
         void LaunchMissile()
         {
