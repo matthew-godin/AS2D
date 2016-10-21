@@ -21,6 +21,7 @@ namespace XNAProject
         const int NOT_MOVING = 0;
         const int MOVING = 1;
         const int NUM_PIXELS_MOVING = 4; // Changed it from 5 to 4
+        const int MAX_NUM_MISSILES = 3;
 
         //Property initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
@@ -77,7 +78,7 @@ namespace XNAProject
         }
 
         /// <summary>
-        /// Charge le(s) composent(s) necessaire(s)
+        /// Loads components required by spaceship
         /// </summary>
         protected override void LoadContent()
         {
@@ -85,6 +86,9 @@ namespace XNAProject
             InputMgr = Game.Services.GetService(typeof(InputManager)) as InputManager;
         }
 
+        /// <summary>
+        /// Perform the ship animation update (with regards to displacement)
+        /// </summary>
         protected override void PerformAnimationUpdate()
         {
             SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % Image.Width,
@@ -92,6 +96,10 @@ namespace XNAProject
                              (int)Delta.X, (int)Delta.Y);
         }
 
+        /// <summary>
+        /// Ship component update method
+        /// </summary>
+        /// <param name="gameTime">Game objectTime</param>
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -103,7 +111,7 @@ namespace XNAProject
             TimeSpentSinceUpdate += TimeElapased;
             if (TimeSpentSinceUpdate >= DisplacementUpdateInterval)
             {
-                DetermineIfShipIsDescending(); // New method
+                DetermineIfShipIsDescending();
                 PerformDisplacementUpdate();
                 TimeSpentSinceUpdate = NO_TIME_ELAPSED;
             }
@@ -123,7 +131,6 @@ namespace XNAProject
         /// <summary>
         /// Manages the descent of the ship at the beginning of the game
         /// </summary>
-        /// <param name="gameTime">Contains time information</param>
         void ManageShipDescent()
         {
             Position += DescentDisplacementVector;
@@ -135,8 +142,9 @@ namespace XNAProject
             }
         }
 
-
-
+        /// <summary>
+        /// Perform displacement update according to keys pressed
+        /// </summary>
         void PerformDisplacementUpdate()
         {
             PreviousPosition = new Vector2(Position.X, Position.Y);
@@ -146,6 +154,9 @@ namespace XNAProject
             AnimationAccordingToMove = (IsMoving() ? MOVING : NOT_MOVING);
         }
 
+        /// <summary>
+        /// Manages the horizontal displacement of the ship according to keys A and D
+        /// </summary>
         void ManageKeyboard()
         {
             if (InputMgr.IsKeyboardActive)
@@ -155,11 +166,20 @@ namespace XNAProject
             }
         }
 
+        /// <summary>
+        /// Returns number of pixels by which the ship must move if key is pressed, otherwise return zero
+        /// </summary>
+        /// <param name="key">Key pressed</param>
+        /// <returns>Number of pixels of displacement or zero</returns>
         int ManageKey(Keys key)
         {
             return InputMgr.IsPressed(key) ? NUM_PIXELS_MOVING : 0;
         }
 
+        /// <summary>
+        /// Adjusts the position's property according to horizontal displacement
+        /// </summary>
+        /// <param name="horizontalDisplacement">Horizontal displacement</param>
         void AdjustPosition(int horizontalDisplacement)
         {
             float posX = ComputePosition(horizontalDisplacement, Position.X, LeftMargin, RightMargin);
@@ -167,6 +187,14 @@ namespace XNAProject
             Position = new Vector2(posX, Position.Y);
         }
 
+        /// <summary>
+        /// Computes horizontal position according to displacement
+        /// </summary>
+        /// <param name="displacement">Horizontal displacement</param>
+        /// <param name="currentPosition">Current position</param>
+        /// <param name="MinThreshold"></param>
+        /// <param name="MaxThreshold"></param>
+        /// <returns></returns>
         float ComputePosition(int displacement, float currentPosition, int MinThreshold, int MaxThreshold)
         {
             float position = currentPosition + displacement;
@@ -182,7 +210,7 @@ namespace XNAProject
         {
             int numMissiles = (Game.Components.Where(component => component is Missile && !((Missile)component).ToDestroy && ((Missile)component).Visible).Count());
 
-            if (numMissiles < 3)
+            if (numMissiles < MAX_NUM_MISSILES)
             {
                 Missile missile = new Missile(Game,
                                                 "Missile",
