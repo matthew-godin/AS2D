@@ -71,15 +71,6 @@ namespace XNAProject
         }
 
         /// <summary>
-        /// Loads the content needed by the Missile
-        /// </summary>
-        protected override void LoadContent()
-        {
-            base.LoadContent();
-            ExplosionImage = TexturesMgr.Find(ExplosionImageName);
-        }
-
-        /// <summary>
         /// Updates the missile
         /// </summary>
         /// <param name="gameTime">Contains time information</param>
