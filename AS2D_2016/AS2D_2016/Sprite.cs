@@ -9,8 +9,6 @@ Role : DrawableGameComponent
        a sprite using Texture2D
 
 Created : 5 October 2016
-Modified : 12 October 2016
-Description : Now shows scaled and IsColliding is implemented
 */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -64,7 +62,6 @@ namespace XNAProject
             ImageDimensions = ComputeImageDimensions();
             Scale = ComputeScale();
             SpriteDimensions = ComputeSpriteDimensions();
-            //Origin = new Vector2(NULL_X, NULL_Y);
             ComputeImageRectangleToDisplay();
             SourceRectangle = ComputeSourceRectangle();
             ComputeMargins();
@@ -156,10 +153,8 @@ namespace XNAProject
         /// Method drawing sprite on the screen
         /// </summary>
         /// <param name="gameTime">Contains time information</param>
-        public override void Draw(GameTime gameTime)
+        public override sealed void Draw(GameTime gameTime)
         {
-            //SpriteMgr.Draw(Image, Position, DisplayZone, Color.White, NO_ROTATION, Origin, Scale, SpriteEffects.None, NO_DEPTH_LAYER);
-
             SpriteMgr.Draw(Image, ImageRectangleToDisplay, SourceRectangle, Color.White);
         }
 

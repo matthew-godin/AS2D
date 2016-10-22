@@ -7,7 +7,6 @@ namespace XNAProject
 {
     interface IDestructible
     {
-        //To implement
         bool ToDestroy { get; }
     }
 }

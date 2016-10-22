@@ -7,7 +7,6 @@ namespace XNAProject
 {
     interface ICollidable
     {
-        //To implement
         bool IsColliding(object otherObject);
     }
 }

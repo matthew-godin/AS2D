@@ -8,13 +8,9 @@ Role : Component showing a centered text
        on the screen at the end of the game
 
 Created : 5 October 2016
-Modified : 11 October 2016
-Description : Almost all the code making everything
-              functional has been written
 */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 
 namespace XNAProject
 {
@@ -68,7 +64,7 @@ namespace XNAProject
             Scale = ComputeScale();
             InitializeOrigin();
             CenteredPosition = new Vector2(Game.Window.ClientBounds.Width / HALF_SIZE_DIVISOR, Game.Window.ClientBounds.Height / HALF_SIZE_DIVISOR);
-            this.Enabled = false;
+            Enabled = false;
         }
 
         /// <summary>

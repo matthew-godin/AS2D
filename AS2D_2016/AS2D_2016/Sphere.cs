@@ -9,7 +9,7 @@ Role : Component inheriting from AnimatedSprite
        the edges of the screen
 
 Created : 12 October 2016
-Modified : 15 October 2016
+Co-author : Raphael Brule
 */
 using System;
 using Microsoft.Xna.Framework;
@@ -50,7 +50,6 @@ namespace XNAProject
         {
             LoadContent();
             base.Initialize();
-            /* Maybe +1 to generator cause excluded*/
             Position = new Vector2(RandomNumberGenerator.Next(NULL_X, RightMargin), RandomNumberGenerator.Next(NULL_Y, BottomMargin / HALF_SIZE_DIVISOR));
             DisplacementAngle = RandomNumberGenerator.Next(MINIMAL_360_DEGREES_CIRCLE_FACTOR, MAXIMAL_EXCLUSIVE_360_DEGREES_CIRCLE_FACTOR) * RIGHT_ANGLE + RandomNumberGenerator.Next(STARTING_MINIMAL_DISPLACEMENT_ANGLE, STARTING_MAXIMAL_DISPLACEMENT_ANGLE);
             DisplacementUpdateVector = new Vector2(DISPLACEMENT_VECTOR_NORM * (float)Math.Cos(MathHelper.ToRadians(DisplacementAngle)), DISPLACEMENT_VECTOR_NORM * (float)Math.Sin(MathHelper.ToRadians(DisplacementAngle)));
@@ -76,24 +75,40 @@ namespace XNAProject
             TimeElpasedSinceDisplacementUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TimeElpasedSinceDisplacementUpdate >= DisplacementUpdateInterval)
             {
-                PerformDisplacementUpdate();
                 TimeElpasedSinceDisplacementUpdate = NO_TIME_ELAPSED;
+                PerformDisplacementUpdate();
             }
         }
 
         /// <summary>
         /// Method updating sphere displacement according to time elapsed
         /// </summary>
-        protected virtual void PerformDisplacementUpdate()
+        void PerformDisplacementUpdate()
         {
             Position += DisplacementUpdateVector;
             ComputeImageToDisplayRectangle();
+            VerifyLeftRightEdgeBouncing();
+            VerifyTopBottomEdgeBouncing();
+        }
+
+        /// <summary>
+        /// Verifies if the sphere is bouncing on the left and right edges of the screen
+        /// </summary>
+        void VerifyLeftRightEdgeBouncing()
+        {
             if (Position.X <= LeftMargin || Position.X >= RightMargin)
             {
                 DisplacementAngle = FLAT_ANGLE - DisplacementAngle;
                 DisplacementUpdateVector = new Vector2(DISPLACEMENT_VECTOR_NORM * (float)Math.Cos(MathHelper.ToRadians(DisplacementAngle)), DISPLACEMENT_VECTOR_NORM * (float)Math.Sin(MathHelper.ToRadians(DisplacementAngle)));
             }
-            else if (Position.Y >= BottomMargin || Position.Y <= TopMargin)
+        }
+
+        /// <summary>
+        /// Verifies if the sphere is bouncing on the top and bottom edges of the screen
+        /// </summary>
+        void VerifyTopBottomEdgeBouncing()
+        {
+            if (Position.Y >= BottomMargin || Position.Y <= TopMargin)
             {
                 DisplacementAngle = FULL_ANGLE - DisplacementAngle;
                 DisplacementUpdateVector = new Vector2(DISPLACEMENT_VECTOR_NORM * (float)Math.Cos(MathHelper.ToRadians(DisplacementAngle)), DISPLACEMENT_VECTOR_NORM * (float)Math.Sin(MathHelper.ToRadians(DisplacementAngle)));

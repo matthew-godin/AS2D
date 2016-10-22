@@ -4,8 +4,7 @@
    Description :       This component, child of AnimatedSprite,
                        manages the spaceship.*/
 
-// Modification : Modifications for the descent of the ship at the beginning
-//                Matthew Godin
+// Co-author : Matthew Godin
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -13,35 +12,24 @@ using Microsoft.Xna.Framework.Input;
 namespace XNAProject
 {
     /// <summary>
-    /// This is a game component that implements IUpdateable.
+    /// This component, child of AnimatedSprite, manages the spaceship
     /// </summary>
     public class Spaceship : AnimatedSprite
     {
-        //Constant
-        const int NOT_MOVING = 0,
-                  MOVING = 1,
-                  NUM_PIXELS_MOVING = 4, // Changed it from 5 to 4
-                  MAX_NUM_MISSILES = 3,
-                  MAX_MISSILE_HEIGHT = 40,
-                  NUM_MISSILES_IN_FRAME = 25;
+        const int NOT_MOVING = 0, MOVING = 1, NUM_PIXELS_MOVING = 4, MAX_NUM_MISSILES = 3, MAX_MISSILE_HEIGHT = 40, NUM_MISSILES_IN_FRAME = 25, BASE_ANIMATION = 0, HALF_WIDTH_SHIP_CANON = 4, ANIMATION_UNIT = 1, ANIMATION_WIDTH = 5, ANIMATION_HEIGHT = 4;
+        const string MISSILE_IMAGE_STRING = "Missile", EXPLOSION_IMAGE_STRING = "Explosion";
+        const float FAST_ANIMATION_INTERVAL = 1.5f * GameProject.STANDARD_INTERVAL;
 
-
-        //Property initially managed by the constructor
         float DisplacementUpdateInterval { get; set; }
-
-        //Property initially managed by Initialize
         float TimeSpentSinceUpdate { get; set; }
         int AnimationAccordingToMove { get; set; }
         Vector2 PreviousPosition { get; set; }
-        // Added for ship descent
         int ShipFinalY { get; set; }
         bool IsDescending { get; set; }
-        Vector2 DescentDisplacementVector { get; set; } // Other similar things could be done in the rest of the class for optimization
+        Vector2 DescentDisplacementVector { get; set; }
         Vector2 ResultingDisplacement { get; set; }
-
-        //Property initially managed by LoadContent
         InputManager InputMgr { get; set; }
-
+        Vector2 MissileSupplementaryPosition { get; set; }
 
         /// <summary>
         /// Spaceship constructor
@@ -53,12 +41,7 @@ namespace XNAProject
         /// <param name="imageDescription">Image description (Vector2)</param>
         /// <param name="animationUpdateInterval">Animation update interval (float)</param>
         /// <param name="displacementUpdateInterval">Displacement update interval (float)</param>
-        public Spaceship(Game game, string imageName,
-                               Vector2 position, Rectangle displayZonee,
-                               Vector2 imageDescription, float animationUpdateInterval,
-                               float displacementUpdateInterval)
-            : base(game, imageName, position, displayZonee,
-                  imageDescription, animationUpdateInterval)
+        public Spaceship(Game game, string imageName, Vector2 position, Rectangle displayZonee, Vector2 imageDescription, float animationUpdateInterval, float displacementUpdateInterval) : base(game, imageName, position, displayZonee, imageDescription, animationUpdateInterval)
         {
             DisplacementUpdateInterval = displacementUpdateInterval;
         }
@@ -69,15 +52,15 @@ namespace XNAProject
         public override void Initialize()
         {
             base.Initialize();
-            TimeSpentSinceUpdate = 0;
-            AnimationAccordingToMove = 0;
-            //To erase with the descent of the ship now : Position = new Vector2(Position.X - DestinationRectangle.Width/2, Game.Window.ClientBounds.Height - DestinationRectangle.Height); 
-            Position = new Vector2(Position.X - SpriteDimensions.X / HALF_SIZE_DIVISOR, Position.Y - SpriteDimensions.Y / HALF_SIZE_DIVISOR); // Nouvelle ligne
+            TimeSpentSinceUpdate = NO_TIME_ELAPSED;
+            AnimationAccordingToMove = BASE_ANIMATION; 
+            Position = new Vector2(Position.X - SpriteDimensions.X / HALF_SIZE_DIVISOR, Position.Y - SpriteDimensions.Y / HALF_SIZE_DIVISOR);
             PreviousPosition = new Vector2(Position.X, Position.Y);
             ShipFinalY = Game.Window.ClientBounds.Height - (int)SpriteDimensions.Y; 
             IsDescending = true;
             DescentDisplacementVector = new Vector2(NO_DISPLACEMENT, NUM_PIXELS_MOVING);
             ResultingDisplacement = Position - PreviousPosition;
+            MissileSupplementaryPosition = new Vector2(SpriteDimensions.X / HALF_SIZE_DIVISOR - HALF_WIDTH_SHIP_CANON, SpriteDimensions.Y / HALF_WIDTH_SHIP_CANON);
         }
 
         /// <summary>
@@ -104,17 +87,32 @@ namespace XNAProject
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            
-            if (InputMgr.IsNewKey(Keys.Space))
-                LaunchMissile();
+            VerifyMissileLaunch();
+            UpdateShip(gameTime);
+        }
 
-            float TimeElapased = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            TimeSpentSinceUpdate += TimeElapased;
+        /// <summary>
+        /// Verifies if Escape key has been pressed and launches a missile if so
+        /// </summary>
+        void VerifyMissileLaunch()
+        {
+            if (InputMgr.IsNewKey(Keys.Space))
+            {
+                LaunchMissile();
+            }
+        }
+
+        /// <summary>
+        /// Manages ship's movement based on time elapsed
+        /// </summary>
+        void UpdateShip(GameTime gameTime)
+        {
+            TimeSpentSinceUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TimeSpentSinceUpdate >= DisplacementUpdateInterval)
             {
+                TimeSpentSinceUpdate = NO_TIME_ELAPSED;
                 DetermineIfShipIsDescending();
                 PerformDisplacementUpdate();
-                TimeSpentSinceUpdate = NO_TIME_ELAPSED;
             }
         }
 
@@ -125,7 +123,7 @@ namespace XNAProject
         {
             if (IsDescending)
             {
-                ManageShipDescent(); // New method
+                ManageShipDescent();
             }
         }
 
@@ -174,7 +172,7 @@ namespace XNAProject
         /// <returns>Number of pixels of displacement or zero</returns>
         int ManageKey(Keys key)
         {
-            return InputMgr.IsPressed(key) ? NUM_PIXELS_MOVING : 0;
+            return InputMgr.IsPressed(key) ? NUM_PIXELS_MOVING : NO_DISPLACEMENT;
         }
 
         /// <summary>
@@ -183,9 +181,9 @@ namespace XNAProject
         /// <param name="horizontalDisplacement">Horizontal displacement</param>
         void AdjustPosition(int horizontalDisplacement)
         {
-            float posX = ComputePosition(horizontalDisplacement, Position.X, LeftMargin, RightMargin);
+            float x = ComputePosition(horizontalDisplacement, Position.X, LeftMargin, RightMargin);
 
-            Position = new Vector2(posX, Position.Y);
+            Position = new Vector2(x, Position.Y);
         }
 
         /// <summary>
@@ -220,17 +218,9 @@ namespace XNAProject
 
             if (numMissiles < MAX_NUM_MISSILES)
             {
-                Missile missile = new Missile(Game, "Missile",
-                                                new Vector2(Position.X + SpriteDimensions.X / HALF_SIZE_DIVISOR - 4, Position.Y - SpriteDimensions.Y / 4),
-                                                new Rectangle(NULL_X, NULL_Y, MAX_MISSILE_HEIGHT, MAX_MISSILE_HEIGHT),
-                                                new Vector2(NUM_MISSILES_IN_FRAME, 1),
-                                                "Explosion",
-                                                new Vector2(5, 4),
-                                                1.5f * GameProject.STANDARD_INTERVAL,
-                                                GameProject.STANDARD_INTERVAL);
+                Missile missile = new Missile(Game, MISSILE_IMAGE_STRING, new Vector2(Position.X + MissileSupplementaryPosition.X, Position.Y - MissileSupplementaryPosition.Y), new Rectangle(NULL_X, NULL_Y, MAX_MISSILE_HEIGHT, MAX_MISSILE_HEIGHT), new Vector2(NUM_MISSILES_IN_FRAME, ANIMATION_UNIT), EXPLOSION_IMAGE_STRING, new Vector2(ANIMATION_WIDTH, ANIMATION_HEIGHT), FAST_ANIMATION_INTERVAL, GameProject.STANDARD_INTERVAL);
                 Game.Components.Add(missile);
             }
         }
-
     }
 }

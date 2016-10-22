@@ -9,7 +9,7 @@ Role : Component inheriting from AnimatedSprite
        upwards and its explosion
 
 Created : 5 October 2016
-Modifie : 15 October 2016
+Co-author : Raphael Brule
 */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -22,20 +22,22 @@ namespace XNAProject
     /// </summary>
     public class Missile : AnimatedSprite
     {
-        const float SLOW_ANIMATION_INTERVAL = 6 * GameProject.STANDARD_INTERVAL, ImageName = 0.00015F, Y_DISPLACEMENT_UPDATE = 4.0F;
+        const float SLOW_ANIMATION_INTERVAL = 6 * GameProject.STANDARD_INTERVAL, ImageName = 1 / 4000F, Y_DISPLACEMENT_UPDATE = 4.0F;
         const int BEFORE_EXPLOSION_FIRST_PHASE = 0, EXPLOSION_DIMENSIONS = 40;
-        //Property initially managed by the constructor
+        const string EXPLOSION_IMAGE_STRING = "Explosion";
+        
         float DisplacementUpdateInterval { get; set; }
         string ExplosionImageName { get; set; }
         Vector2 ImageExplosionDescription { get; set; }
         Texture2D ExplosionImage { get; set; }
         float TimeSpentSinceDisplacementUpdate { get; set; }
-        public bool ExplosionActivated { get; private set; }
         int ExplosionPhase { get; set; }
-        public AnimatedSprite Explosion { get; private set; }
         Vector2 DisplacementUpdateVector { get; set; }
         bool Collision { get; set; }
         Rectangle ExplosionZone { get; set; }
+        AnimatedSprite Explosion { get; set; }
+        int ExplosionNumPhases { get; set; }
+        public bool ExplosionActivated { get; private set; }
 
         /// <summary>
         /// Missile constructor
@@ -63,7 +65,6 @@ namespace XNAProject
             base.Initialize();
             TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
             ExplosionActivated = false;
-            //ExplosionDone = false;
             DisplacementUpdateVector = new Vector2(NULL_X, Y_DISPLACEMENT_UPDATE);
             Collision = false;
             ExplosionZone = new Rectangle(NULL_X, NULL_Y, EXPLOSION_DIMENSIONS, EXPLOSION_DIMENSIONS);
@@ -75,25 +76,60 @@ namespace XNAProject
         /// <param name="gameTime">Contains time information</param>
         public override void Update(GameTime gameTime)
         {
+            VerifierExplosionActivated(gameTime);
+            VerifyCollision();
+        }
 
-            
-            TimeSpentSinceDisplacementUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (TimeSpentSinceDisplacementUpdate >= (ExplosionActivated? SLOW_ANIMATION_INTERVAL:DisplacementUpdateInterval))
+        /// <summary>
+        /// Checks if ExplosionActivated == true
+        /// </summary>
+        /// <param name="gameTime">Contains time information</param>
+        void VerifierExplosionActivated(GameTime gameTime)
+        {
+            if (ExplosionActivated)
             {
-                if (!ExplosionActivated)
-                {
-                    base.Update(gameTime);
-                    PerformDisplacementUpdate();
-                    TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
-                }
-                else
-                {
-                    ManageExplosion();
-                    TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
-                }
-
+                UpdateExplosion(gameTime);
             }
+            else
+            {
+                UpdateMissile(gameTime);   
+            }
+        }
 
+        /// <summary>
+        /// Called if ExplosionActivated == true
+        /// </summary>
+        /// <param name="gameTime">Contains time information</param>
+        void UpdateExplosion(GameTime gameTime)
+        {
+            TimeSpentSinceDisplacementUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (TimeSpentSinceDisplacementUpdate >= SLOW_ANIMATION_INTERVAL)
+            {
+                TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
+                ManageExplosion();
+            }
+        }
+
+        /// <summary>
+        /// Called if ExplosionActivated == false
+        /// </summary>
+        /// <param name="gameTime">Contains time information</param>
+        void UpdateMissile(GameTime gameTime)
+        {
+            TimeSpentSinceDisplacementUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (TimeSpentSinceDisplacementUpdate >= DisplacementUpdateInterval)
+            {
+                TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
+                base.Update(gameTime);
+                PerformDisplacementUpdate();
+            }
+        }
+
+        /// <summary>
+        /// Verifies if Collision == true and creates the explosion if that is the case by putting back Collison = false
+        /// </summary>
+        void VerifyCollision()
+        {
             if (Collision)
             {
                 Collision = false;
@@ -109,23 +145,31 @@ namespace XNAProject
             Position -= DisplacementUpdateVector;
             DisplacementUpdateInterval -= ImageName;
             ComputeImageRectangleToDisplay();
+            VerifyCeilingCollision();
+        }
+
+        /// <summary>
+        /// Verifies if there is collision with the ceiling and activates explosion if that is the case
+        /// </summary>
+        void VerifyCeilingCollision()
+        {
             if (Position.Y <= TopMargin && !ExplosionActivated)
             {
                 ActivateExplosion();
             }
         }
         
-
         /// <summary>
         /// Called when missile must explode
         /// </summary>
         public void ActivateExplosion()
         {
             Visible = false;
-            Explosion = new AnimatedSprite(Game, "Explosion", Position, ExplosionZone, ImageExplosionDescription, SLOW_ANIMATION_INTERVAL);
+            Explosion = new AnimatedSprite(Game, EXPLOSION_IMAGE_STRING, Position, ExplosionZone, ImageExplosionDescription, SLOW_ANIMATION_INTERVAL);
             ExplosionActivated = true;
             ExplosionPhase = BEFORE_EXPLOSION_FIRST_PHASE;
             Collision = true;
+            ExplosionNumPhases = (int)(ImageExplosionDescription.X * ImageExplosionDescription.Y);
         }
 
         /// <summary>
@@ -135,7 +179,7 @@ namespace XNAProject
         void ManageExplosion()
         {
             ++ExplosionPhase;
-            if (ExplosionPhase >= ImageExplosionDescription.X * ImageExplosionDescription.Y)
+            if (ExplosionPhase >= ExplosionNumPhases)
             {
                 ExplosionActivated = false;
                 Explosion.ToDestroy = true;

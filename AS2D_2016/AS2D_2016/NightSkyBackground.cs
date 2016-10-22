@@ -1,18 +1,17 @@
-﻿/* Author :            Raphael Brule
-   File :           NightSkyBackground.cs
-   Date :              5 October 2016
-   Description :       This DrawableGameComponent allows the background
-                       to move top to bottom repeatedly.*/
+﻿/*
+NightSkyBackground.cs
+---------------------
 
- 
-// Co-Author : Matthew Godin
-// Modified : 11 October 2016
-//Description : The entirety of the code has been modified to make the background
-//              functional and not crushed
+By Matthew Godin
 
+Role : Component containing
+       a night sky
+       background
+Created : 5 October 2016
+Co-author : Raphael Brule
+*/
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 
 namespace XNAProject
 {

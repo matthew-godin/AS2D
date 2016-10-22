@@ -10,8 +10,6 @@ Role : Component inheriting from Sprite and
        frames in the same loaded image
 
 Created : 5 October 2016
-Modified : 12 October 2016
-Description : Large modifications for IsColliding to make ToDestroy and others
 */
 using Microsoft.Xna.Framework;
 
@@ -22,21 +20,16 @@ namespace XNAProject
     /// </summary>
     public class AnimatedSprite : Sprite, IDestructible
     {
-        //Constants
         protected const int NO_TIME_ELAPSED = 0, NO_DISPLACEMENT = 0;
 
-        //fireball
         Vector2 ImageDescription { get; set; }
-        protected float AnimationUpdateInterval { get; set; }
-
-        //Properties initially managed by Initialze
-        public bool ToDestroy { get; set; }
         float TimeElapsedSinceAnimationUpdate { get; set; }
-        //int Row { get; set; }
-        //int VariableToChangeName { get; set; }
-        protected Vector2 Delta { get; set; }
         int AnimationFrameWidth { get; set; }
         int AnimationFrameHeight { get; set; }
+        float AnimationUpdateInterval { get; set; }
+        protected Vector2 Delta { get; private set; }
+        public bool ToDestroy { get; set; }
+
 
         /// <summary>
         /// AnimatedSprite's constructor
@@ -119,8 +112,8 @@ namespace XNAProject
             TimeElapsedSinceAnimationUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TimeElapsedSinceAnimationUpdate >= AnimationUpdateInterval)
             {
-                PerformAnimationUpdate();
                 TimeElapsedSinceAnimationUpdate = NO_TIME_ELAPSED;
+                PerformAnimationUpdate();
             }
         }
     }
