@@ -114,5 +114,6 @@ namespace XNAProject
                 DisplacementUpdateVector = new Vector2(DISPLACEMENT_VECTOR_NORM * (float)Math.Cos(MathHelper.ToRadians(DisplacementAngle)), DISPLACEMENT_VECTOR_NORM * (float)Math.Sin(MathHelper.ToRadians(DisplacementAngle)));
             }
         }
+        int bonjour;
     }
 }
