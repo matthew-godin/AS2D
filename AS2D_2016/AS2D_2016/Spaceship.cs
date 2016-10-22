@@ -73,11 +73,12 @@ namespace XNAProject
         }
 
         /// <summary>
-        /// Perform the ship animation update (with regards to displacement)
+        /// Creates the rectangle representing the perimeter of what is selected by the original image
         /// </summary>
-        protected override void PerformAnimationUpdate()
+        /// <returns>A rectangle of type Rectangle</returns>
+        protected new Rectangle CreateSourceRectangle()
         {
-            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % (int)ImageDimensions.X, (int)Delta.Y * AnimationAccordingToMove, (int)Delta.X, (int)Delta.Y);
+            return new Rectangle((SourceRectangle.X + (int)Delta.X) % (int)ImageDimensions.X, (int)Delta.Y * AnimationAccordingToMove, (int)Delta.X, (int)Delta.Y);
         }
 
         /// <summary>
