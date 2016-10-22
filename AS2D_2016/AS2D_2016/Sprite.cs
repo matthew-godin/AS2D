@@ -26,21 +26,20 @@ namespace XNAProject
         protected const int NULL_Y = 0, NULL_X = 0, NULL_HEIGHT = 0, NULL_WIDTH = 0, HALF_SIZE_DIVISOR = 2;
 
         string ImageName { get; set; }
-        public Vector2 Position { get; protected set; }
-        protected Rectangle DisplayZone { get; set; }
-        protected SpriteBatch SpriteMgr { get; set; }
-        protected RessourcesManager<Texture2D> TexturesMgr { get; set; }
-        /* probably private */
         Texture2D Image { get; set; }
         float Scale { get; set; }
         Rectangle ImageRectangleToDisplay { get; set; }
-        protected int RightMargin { get; set; }
-        protected int BottomMargin { get; set; }
-        protected int LeftMargin { get; set; }
-        protected int TopMargin { get; set; }
+        SpriteBatch SpriteMgr { get; set; }
+        RessourcesManager<Texture2D> TexturesMgr { get; set; }
+        protected Rectangle DisplayZone { get; private set; }
+        protected int RightMargin { get; private set; }
+        protected int BottomMargin { get; private set; }
+        protected int LeftMargin { get; private set; }
+        protected int TopMargin { get; private set; }
         protected Vector2 SpriteDimensions { get; private set; }
         protected Vector2 ImageDimensions { get; private set; }
-        protected Rectangle SourceRectangle { get; set; }
+        protected Rectangle SourceRectangle { get; private set; }
+        public Vector2 Position { get; protected set; }
 
         /// <summary>
         /// Sprite's constructor
@@ -67,7 +66,7 @@ namespace XNAProject
             SpriteDimensions = ComputeSpriteDimensions();
             //Origin = new Vector2(NULL_X, NULL_Y);
             ComputeImageRectangleToDisplay();
-            SourceRectangle = ComputeSourceRectangle();
+            ComputeSourceRectangle();
             ComputeMargins();
         }
 
@@ -75,10 +74,19 @@ namespace XNAProject
         /// Computes rectangle covering what will be displayed
         /// </summary>
         /// <returns>Source Rectangle</returns>
-        protected virtual Rectangle ComputeSourceRectangle()
+        protected void ComputeSourceRectangle()
+        {
+            SourceRectangle = CreateSourceRectangle();
+        }
+
+        /// <summary>
+        /// Creates the rectangle representing the perimeter of what is selected by the original image
+        /// </summary>
+        /// <returns>A rectangle of type Rectangle</returns>
+        Rectangle CreateSourceRectangle()
         {
             return new Rectangle(NULL_X, NULL_Y, Image.Width, Image.Height);
-        }
+        } 
 
         /// <summary>
         /// Computes the image dimensions

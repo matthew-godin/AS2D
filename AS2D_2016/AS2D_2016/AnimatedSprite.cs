@@ -78,15 +78,6 @@ namespace XNAProject
         }
 
         /// <summary>
-        /// Computes rectangle covering what will be displayed
-        /// </summary>
-        /// <returns>Source Rectangle</returns>
-        protected override Rectangle ComputeSourceRectangle()
-        {
-            return new Rectangle(NULL_X, NULL_Y, (int)Delta.X, (int)Delta.Y);
-        }
-
-        /// <summary>
         /// Computes the sprite horizontal scale for the Draw method
         /// </summary>
         protected override float ComputeHorizontalScale()
@@ -107,7 +98,16 @@ namespace XNAProject
         /// </summary>
         protected virtual void PerformAnimationUpdate()
         {
-            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % (int)ImageDimensions.X, SourceRectangle.X >= AnimationFrameWidth ? (SourceRectangle.Y >= AnimationFrameHeight ? NULL_Y : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
+            ComputeSourceRectangle();
+        }
+
+        /// <summary>
+        /// Creates the rectangle representing the perimeter of what is selected by the original image
+        /// </summary>
+        /// <returns>A rectangle of type Rectangle</returns>
+        protected new Rectangle CreateSourceRectangle()
+        {
+            return new Rectangle((SourceRectangle.X + (int)Delta.X) % (int)ImageDimensions.X, SourceRectangle.X >= AnimationFrameWidth ? (SourceRectangle.Y >= AnimationFrameHeight ? NULL_Y : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
         }
 
         /// <summary>
