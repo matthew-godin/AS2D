@@ -180,5 +180,6 @@ namespace XNAProject
             TopMargin = NULL_HEIGHT;
             LeftMargin = NULL_WIDTH;
         }
+        int hello;
     }
 }
