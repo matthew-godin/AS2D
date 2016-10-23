@@ -51,11 +51,16 @@ namespace XNAProject
         {
             LoadContent();
             base.Initialize();
+            HazardousComponentsInitialization();
+            DisplacementUpdateVector = new Vector2(DISPLACEMENT_VECTOR_NORM * (float)Math.Cos(MathHelper.ToRadians(DisplacementAngle)), DISPLACEMENT_VECTOR_NORM * (float)Math.Sin(MathHelper.ToRadians(DisplacementAngle)));
+            TimeElpasedSinceDisplacementUpdate = NO_TIME_ELAPSED;
+        }
+
+        void HazardousComponentsInitialization()
+        {
             Position = new Vector2(RandomNumberGenerator.Next(NULL_X, RightMargin), RandomNumberGenerator.Next(NULL_Y, BottomMargin / HALF_SIZE_DIVISOR));
             ComputeImageToDisplayRectangle();
             DisplacementAngle = RandomNumberGenerator.Next(MINIMAL_360_DEGREES_CIRCLE_FACTOR, MAXIMAL_EXCLUSIVE_360_DEGREES_CIRCLE_FACTOR) * RIGHT_ANGLE + RandomNumberGenerator.Next(STARTING_MINIMAL_DISPLACEMENT_ANGLE, STARTING_MAXIMAL_DISPLACEMENT_ANGLE);
-            DisplacementUpdateVector = new Vector2(DISPLACEMENT_VECTOR_NORM * (float)Math.Cos(MathHelper.ToRadians(DisplacementAngle)), DISPLACEMENT_VECTOR_NORM * (float)Math.Sin(MathHelper.ToRadians(DisplacementAngle)));
-            TimeElpasedSinceDisplacementUpdate = NO_TIME_ELAPSED;
         }
 
         /// <summary>

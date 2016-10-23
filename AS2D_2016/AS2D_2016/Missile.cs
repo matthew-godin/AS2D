@@ -22,7 +22,7 @@ namespace XNAProject
     /// </summary>
     public class Missile : AnimatedSprite
     {
-        const float SLOW_ANIMATION_INTERVAL = 6 * GameProject.STANDARD_INTERVAL, ImageName = 1 / 4000F, Y_DISPLACEMENT_UPDATE = 4.0F;
+        const float SLOW_ANIMATION_INTERVAL = 6 * GameProject.STANDARD_INTERVAL, ImageName = 0.00015F, Y_DISPLACEMENT_UPDATE = 4.0F;
         const int BEFORE_EXPLOSION_FIRST_PHASE = 0, EXPLOSION_DIMENSIONS = 40;
         const string EXPLOSION_IMAGE_STRING = "Explosion";
         
