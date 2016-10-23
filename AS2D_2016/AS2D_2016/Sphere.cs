@@ -21,7 +21,8 @@ namespace XNAProject
     /// </summary>
     public class Sphere : AnimatedSprite
     {
-        const int STARTING_MINIMAL_DISPLACEMENT_ANGLE = 15, STARTING_MAXIMAL_DISPLACEMENT_ANGLE = 75, RIGHT_ANGLE = 90, MINIMAL_360_DEGREES_CIRCLE_FACTOR = 0, MAXIMAL_EXCLUSIVE_360_DEGREES_CIRCLE_FACTOR = 4, FLAT_ANGLE = 180, FULL_ANGLE = 360, DISPLACEMENT_VECTOR_NORM = 3;
+        const int STARTING_MINIMAL_DISPLACEMENT_ANGLE = 15, STARTING_MAXIMAL_DISPLACEMENT_ANGLE = 75, RIGHT_ANGLE = 90, MINIMAL_360_DEGREES_CIRCLE_FACTOR = 0, MAXIMAL_EXCLUSIVE_360_DEGREES_CIRCLE_FACTOR = 4, FLAT_ANGLE = 180, FULL_ANGLE = 360;
+        const float DISPLACEMENT_VECTOR_NORM = 3.5F;
 
         float DisplacementUpdateInterval { get; set; }
         Random RandomNumberGenerator { get; set; }
@@ -51,6 +52,7 @@ namespace XNAProject
             LoadContent();
             base.Initialize();
             Position = new Vector2(RandomNumberGenerator.Next(NULL_X, RightMargin), RandomNumberGenerator.Next(NULL_Y, BottomMargin / HALF_SIZE_DIVISOR));
+            ComputeImageToDisplayRectangle();
             DisplacementAngle = RandomNumberGenerator.Next(MINIMAL_360_DEGREES_CIRCLE_FACTOR, MAXIMAL_EXCLUSIVE_360_DEGREES_CIRCLE_FACTOR) * RIGHT_ANGLE + RandomNumberGenerator.Next(STARTING_MINIMAL_DISPLACEMENT_ANGLE, STARTING_MAXIMAL_DISPLACEMENT_ANGLE);
             DisplacementUpdateVector = new Vector2(DISPLACEMENT_VECTOR_NORM * (float)Math.Cos(MathHelper.ToRadians(DisplacementAngle)), DISPLACEMENT_VECTOR_NORM * (float)Math.Sin(MathHelper.ToRadians(DisplacementAngle)));
             TimeElpasedSinceDisplacementUpdate = NO_TIME_ELAPSED;

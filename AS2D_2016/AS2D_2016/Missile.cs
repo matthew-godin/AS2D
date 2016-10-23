@@ -116,11 +116,11 @@ namespace XNAProject
         /// <param name="gameTime">Contains time information</param>
         void UpdateMissile(GameTime gameTime)
         {
+            base.Update(gameTime);
             TimeSpentSinceDisplacementUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (TimeSpentSinceDisplacementUpdate >= DisplacementUpdateInterval)
             {
                 TimeSpentSinceDisplacementUpdate = NO_TIME_ELAPSED;
-                base.Update(gameTime);
                 PerformDisplacementUpdate();
             }
         }

@@ -40,8 +40,7 @@ namespace XNAProject
         /// <param name="displayZonee">Sprite's display zone</param>
         /// <param name="imageDescription">Number of x and y sprites in loaded image</param>
         /// <param name="animationUpdateInterval">Sprite animation update interval</param>
-        public AnimatedSprite(Game game, string imageName, Vector2 position, Rectangle displayZonee, Vector2 imageDescription, float animationUpdateInterval) 
-            : base(game, imageName, position, displayZonee)
+        public AnimatedSprite(Game game, string imageName, Vector2 position, Rectangle displayZonee, Vector2 imageDescription, float animationUpdateInterval) : base(game, imageName, position, displayZonee)
         {
             ImageDescription = new Vector2(imageDescription.X, imageDescription.Y);
             AnimationUpdateInterval = animationUpdateInterval;
@@ -71,6 +70,15 @@ namespace XNAProject
         }
 
         /// <summary>
+        /// Computes rectangle covering what will be displayed
+        /// </summary>
+        /// <returns>Source Rectangle</returns>
+        protected override Rectangle ComputeSourceRectangle()
+        {
+            return new Rectangle(NULL_X, NULL_Y, (int)Delta.X, (int)Delta.Y);
+        }
+
+        /// <summary>
         /// Computes the sprite horizontal scale for the Draw method
         /// </summary>
         protected override float ComputeHorizontalScale()
@@ -91,16 +99,7 @@ namespace XNAProject
         /// </summary>
         protected virtual void PerformAnimationUpdate()
         {
-            ComputeSourceRectangle();
-        }
-
-        /// <summary>
-        /// Creates the rectangle representing the perimeter of what is selected by the original image
-        /// </summary>
-        /// <returns>A rectangle of type Rectangle</returns>
-        protected new Rectangle CreateSourceRectangle()
-        {
-            return new Rectangle((SourceRectangle.X + (int)Delta.X) % (int)ImageDimensions.X, SourceRectangle.X >= AnimationFrameWidth ? (SourceRectangle.Y >= AnimationFrameHeight ? NULL_Y : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
+            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % (int)ImageDimensions.X, SourceRectangle.X >= AnimationFrameWidth ? (SourceRectangle.Y >= AnimationFrameHeight ? NULL_Y : SourceRectangle.Y + (int)Delta.Y) : SourceRectangle.Y, (int)Delta.X, (int)Delta.Y);
         }
 
         /// <summary>

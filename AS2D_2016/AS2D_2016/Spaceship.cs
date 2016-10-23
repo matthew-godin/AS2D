@@ -73,12 +73,11 @@ namespace XNAProject
         }
 
         /// <summary>
-        /// Creates the rectangle representing the perimeter of what is selected by the original image
+        /// Method updating AnimatedSprite according to time elapsed
         /// </summary>
-        /// <returns>A rectangle of type Rectangle</returns>
-        protected new Rectangle CreateSourceRectangle()
+        protected override void PerformAnimationUpdate()
         {
-            return new Rectangle((SourceRectangle.X + (int)Delta.X) % (int)ImageDimensions.X, (int)Delta.Y * AnimationAccordingToMove, (int)Delta.X, (int)Delta.Y);
+            SourceRectangle = new Rectangle((SourceRectangle.X + (int)Delta.X) % (int)ImageDimensions.X, (int)Delta.Y * AnimationAccordingToMove, (int)Delta.X, (int)Delta.Y);
         }
 
         /// <summary>
