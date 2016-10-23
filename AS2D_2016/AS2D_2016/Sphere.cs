@@ -21,7 +21,7 @@ namespace XNAProject
     /// </summary>
     public class Sphere : AnimatedSprite
     {
-        const int STARTING_MINIMAL_DISPLACEMENT_ANGLE = 15, STARTING_MAXIMAL_DISPLACEMENT_ANGLE = 75, RIGHT_ANGLE = 90, MINIMAL_360_DEGREES_CIRCLE_FACTOR = 0, MAXIMAL_EXCLUSIVE_360_DEGREES_CIRCLE_FACTOR = 4, FLAT_ANGLE = 180, FULL_ANGLE = 360;
+        const int STARTING_MINIMAL_DISPLACEMENT_ANGLE = 15, STARTING_MAXIMAL_DISPLACEMENT_ANGLE = 75, RIGHT_ANGLE = 90, MINIMAL_360_DEGREES_CIRCLE_FACTOR = 0, MAXIMAL_EXCLUSIVE_360_DEGREES_CIRCLE_FACTOR = 4, FLAT_ANGLE = 180, FULL_ANGLE = 360, X_UNIT = 1, Y_UNIT = 1;
         const float DISPLACEMENT_VECTOR_NORM = 3.5F;
 
         float DisplacementUpdateInterval { get; set; }
@@ -58,7 +58,7 @@ namespace XNAProject
 
         void HazardousComponentsInitialization()
         {
-            Position = new Vector2(RandomNumberGenerator.Next(NULL_X, RightMargin), RandomNumberGenerator.Next(NULL_Y, BottomMargin / HALF_SIZE_DIVISOR));
+            Position = new Vector2(RandomNumberGenerator.Next(X_UNIT, RightMargin), RandomNumberGenerator.Next(Y_UNIT, BottomMargin / HALF_SIZE_DIVISOR));
             ComputeImageToDisplayRectangle();
             DisplacementAngle = RandomNumberGenerator.Next(MINIMAL_360_DEGREES_CIRCLE_FACTOR, MAXIMAL_EXCLUSIVE_360_DEGREES_CIRCLE_FACTOR) * RIGHT_ANGLE + RandomNumberGenerator.Next(STARTING_MINIMAL_DISPLACEMENT_ANGLE, STARTING_MAXIMAL_DISPLACEMENT_ANGLE);
         }
