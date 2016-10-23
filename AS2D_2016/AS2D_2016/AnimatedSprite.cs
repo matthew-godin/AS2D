@@ -26,7 +26,7 @@ namespace XNAProject
         float TimeElapsedSinceAnimationUpdate { get; set; }
         int AnimationFrameWidth { get; set; }
         int AnimationFrameHeight { get; set; }
-        float AnimationUpdateInterval { get; set; }
+        protected float AnimationUpdateInterval { get; private set; }
         protected Vector2 Delta { get; private set; }
         public bool ToDestroy { get; set; }
 

@@ -16,9 +16,9 @@ namespace XNAProject
     /// </summary>
     public class Spaceship : AnimatedSprite
     {
-        const int NOT_MOVING = 0, MOVING = 1, NUM_PIXELS_MOVING = 4, MAX_NUM_MISSILES = 3, MAX_MISSILE_HEIGHT = 40, NUM_MISSILES_IN_FRAME = 25, BASE_ANIMATION = 0, HALF_WIDTH_SHIP_CANON = 4, ANIMATION_UNIT = 1, ANIMATION_WIDTH = 5, ANIMATION_HEIGHT = 4;
+        const int NOT_MOVING = 0, MOVING = 1, NUM_PIXELS_MOVING = 4, MAX_NUM_MISSILES = 3, MAX_MISSILE_HEIGHT = 40, NUM_MISSILES_IN_FRAME = 25, BASE_ANIMATION = 0, HALF_WIDTH_SHIP_CANON = 4, ANIMATION_UNIT = 1, ANIMATION_WIDTH = 5, ANIMATION_HEIGHT = 4, NO_ACCELERATION = 0;
         const string MISSILE_IMAGE_STRING = "Missile", EXPLOSION_IMAGE_STRING = "Explosion";
-        const float FAST_ANIMATION_INTERVAL = 1.5f * GameProject.STANDARD_INTERVAL;
+        const float ACCELERATION_FACTOR = 1f / 600F, MIN_INTERVAL = 0.01F, MAX_INTERVAL = 1;
 
         float DisplacementUpdateInterval { get; set; }
         float TimeSpentSinceUpdate { get; set; }
@@ -161,7 +161,30 @@ namespace XNAProject
             if (InputMgr.IsKeyboardActive)
             {
                 int horizontalDisplacement = ManageKey(Keys.D) - ManageKey(Keys.A);
+                ManageAcceleration();
+                VerifyIfPositionAdjustmentIsNecessary(horizontalDisplacement);
+            }
+        }
+
+        /// <summary>
+        /// Verifies if we moved and Spaceship position must be adjusted
+        /// </summary>
+        /// <param name="horizontalDisplacement">Horizontal displacement performed by the Spaceship</param>
+        void VerifyIfPositionAdjustmentIsNecessary(int horizontalDisplacement)
+        {
+            if (horizontalDisplacement != NO_DISPLACEMENT)
+            {
                 AdjustPosition(horizontalDisplacement);
+            }
+        }
+
+        void ManageAcceleration()
+        {
+            int accelerationModificator = ManageKey(Keys.PageDown) - ManageKey(Keys.PageUp);
+            if (accelerationModificator != NO_ACCELERATION)
+            {
+                DisplacementUpdateInterval += accelerationModificator * ACCELERATION_FACTOR;
+                DisplacementUpdateInterval = MathHelper.Max(MathHelper.Min(DisplacementUpdateInterval, MAX_INTERVAL), MIN_INTERVAL);
             }
         }
 
@@ -218,7 +241,7 @@ namespace XNAProject
 
             if (numMissiles < MAX_NUM_MISSILES)
             {
-                Missile missile = new Missile(Game, MISSILE_IMAGE_STRING, new Vector2(Position.X + MissileSupplementaryPosition.X, Position.Y - MissileSupplementaryPosition.Y), new Rectangle(NULL_X, NULL_Y, MAX_MISSILE_HEIGHT, MAX_MISSILE_HEIGHT), new Vector2(NUM_MISSILES_IN_FRAME, ANIMATION_UNIT), EXPLOSION_IMAGE_STRING, new Vector2(ANIMATION_WIDTH, ANIMATION_HEIGHT), FAST_ANIMATION_INTERVAL, GameProject.STANDARD_INTERVAL);
+                Missile missile = new Missile(Game, MISSILE_IMAGE_STRING, new Vector2(Position.X + MissileSupplementaryPosition.X, Position.Y - MissileSupplementaryPosition.Y), new Rectangle(NULL_X, NULL_Y, MAX_MISSILE_HEIGHT, MAX_MISSILE_HEIGHT), new Vector2(NUM_MISSILES_IN_FRAME, ANIMATION_UNIT), EXPLOSION_IMAGE_STRING, new Vector2(ANIMATION_WIDTH, ANIMATION_HEIGHT), AnimationUpdateInterval, DisplacementUpdateInterval);
                 Game.Components.Add(missile);
             }
         }
