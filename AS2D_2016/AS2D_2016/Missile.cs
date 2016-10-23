@@ -164,7 +164,7 @@ namespace XNAProject
         public void ActivateExplosion()
         {
             Visible = false;
-            Explosion = new AnimatedSprite(Game, EXPLOSION_IMAGE_STRING, Position, ExplosionZone, ImageExplosionDescription, SLOW_ANIMATION_INTERVAL);
+            Explosion = new AnimatedSprite(Game, EXPLOSION_IMAGE_STRING, new Vector2(Position.X - EXPLOSION_DIMENSIONS / HALF_SIZE_DIVISOR + SpriteDimensions.X / HALF_SIZE_DIVISOR, Position.Y), ExplosionZone, ImageExplosionDescription, SLOW_ANIMATION_INTERVAL);
             ExplosionActivated = true;
             ExplosionPhase = BEFORE_EXPLOSION_FIRST_PHASE;
             Collision = true;
