@@ -34,7 +34,6 @@ namespace XNAProject
         Vector2 IncrementVector { get; set; }
         Vector2 FirstBackgroundPosition { get; set; }
         Vector2 SecondBackgroundPosition { get; set; }
-        Vector2 NullOrigin { get; set; }
         SpriteBatch SpriteMgr { get; set; }
         string ImageName { get; set; }
         Texture2D BackgroundImage { get; set; }
@@ -56,10 +55,9 @@ namespace XNAProject
         /// </summary>
         public override void Initialize()
         {
-            TimeElapsedSinceUpdate = NO_TIME_ELAPSED;
-            NullOrigin = new Vector2(NULL_X, NULL_Y);
-            IncrementVector = new Vector2(NULL_X, Y_INCREMENT);
             base.Initialize();
+            TimeElapsedSinceUpdate = NO_TIME_ELAPSED;
+            IncrementVector = new Vector2(NULL_X, Y_INCREMENT);
             ScaledImageHeight = BackgroundImage.Height * SCALE;
             ReplaceBackgrounds();
         }
@@ -78,8 +76,8 @@ namespace XNAProject
         /// </summary>
         protected override void LoadContent()
         {
+            BackgroundImage = (Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>).Find(ImageName);
             SpriteMgr = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
-            BackgroundImage = Game.Content.Load<Texture2D>("Textures/" + ImageName);
         }
 
         /// <summary>
@@ -89,14 +87,6 @@ namespace XNAProject
         public override void Update(GameTime gameTime)
         {
             TimeElapsedSinceUpdate += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            VerifierSiIncrementationNecessaire();
-        }
-
-        /// <summary>
-        /// Checks if enough time has elapsed to move or even swap the backgrounds
-        /// </summary>
-        void VerifierSiIncrementationNecessaire()
-        {
             if (TimeElapsedSinceUpdate >= UpdateInterval)
             {
                 TimeElapsedSinceUpdate = NO_TIME_ELAPSED;
@@ -123,8 +113,8 @@ namespace XNAProject
         /// <param name="gameTime">Contains time information</param>
         public override void Draw(GameTime gameTime)
         {
-            SpriteMgr.Draw(BackgroundImage, FirstBackgroundPosition, null, Color.White, NO_ANGLE, NullOrigin, SCALE, SpriteEffects.None, NO_LAYER_DEPTH);
-            SpriteMgr.Draw(BackgroundImage, SecondBackgroundPosition, null, Color.White, NO_ANGLE, NullOrigin, SCALE, SpriteEffects.None, NO_LAYER_DEPTH);
+            SpriteMgr.Draw(BackgroundImage, FirstBackgroundPosition, null, Color.White, NO_ANGLE, Vector2.Zero, SCALE, SpriteEffects.None, NO_LAYER_DEPTH);
+            SpriteMgr.Draw(BackgroundImage, SecondBackgroundPosition, null, Color.White, NO_ANGLE, Vector2.Zero, SCALE, SpriteEffects.None, NO_LAYER_DEPTH);
         }
     }
 }

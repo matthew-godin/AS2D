@@ -14,7 +14,6 @@ Co-author : Raphael Brule
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-
 namespace XNAProject
 {
     /// <summary>

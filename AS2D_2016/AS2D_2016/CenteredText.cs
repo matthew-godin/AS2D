@@ -72,7 +72,7 @@ namespace XNAProject
         /// </summary>
         protected override void LoadContent()
         {
-            Font = Game.Content.Load<SpriteFont>("Fonts/" + FontName);
+            Font = (Game.Services.GetService(typeof(RessourcesManager<SpriteFont>)) as RessourcesManager<SpriteFont>).Find(FontName);
             SpriteMgr = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
         }
 

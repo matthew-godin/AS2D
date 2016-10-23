@@ -9,10 +9,10 @@ Role : DrawableGameComponent
        a sprite using Texture2D
 
 Created : 5 October 2016
+Co-author : Raphael Brule
 */
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 
 namespace XNAProject
 {
@@ -24,15 +24,14 @@ namespace XNAProject
         protected const int NULL_Y = 0, NULL_X = 0, NULL_HEIGHT = 0, NULL_WIDTH = 0, HALF_SIZE_DIVISOR = 2;
 
         SpriteBatch SpriteMgr { get; set; }
-        RessourcesManager<Texture2D> TexturesMgr { get; set; }
         string ImageName { get; set; }
         Texture2D Image { get; set; }
         float Scale { get; set; }
         Rectangle ImageRectangleToDisplay { get; set; }
-        protected int RightMargin { get; set; }
-        protected int BottomMargin { get; set; }
-        protected int LeftMargin { get; set; }
-        protected int TopMargin { get; set; }
+        protected int RightMargin { get; private set; }
+        protected int BottomMargin { get; private set; }
+        protected int LeftMargin { get; private set; }
+        protected int TopMargin { get; private set; }
         protected Rectangle DisplayZone { get; private set; }
         protected Vector2 SpriteDimensions { get; private set; }
         protected Vector2 ImageDimensions { get; private set; }
@@ -145,8 +144,7 @@ namespace XNAProject
         protected override void LoadContent()
         {
             SpriteMgr = Game.Services.GetService(typeof(SpriteBatch)) as SpriteBatch;
-            TexturesMgr = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
-            Image = TexturesMgr.Find(ImageName);
+            Image = (Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>).Find(ImageName);
         }
 
         /// <summary>
